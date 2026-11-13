@@ -33,19 +33,20 @@ class FunctionalTestOrchestrator(Orchestrator):
         """Skip the release check."""
 
 
-def run_scubagoggles(*argv: str):
-    """Run `scubagoggles gws <argv>` in-process, without opening a browser."""
+def run_scubagoggles(*argv: str) -> Path:
+    """Run `scubagoggles gws <argv>` quietly and return its report directory."""
     parser = ScubaArgumentParser(create_parser())
     args = parser.parse_args_with_config(
         ['gws', *argv, '--quiet', '--silencebodwarnings',
          '--outputproviderfilename', PROVIDER_FILE_NAME,
          '--outjsonfilename', RESULTS_FILE_NAME])
     FunctionalTestOrchestrator(args).start_automation()
+    return args.outputpath
 
 
 def find_results_file(output_dir: Path) -> Path:
-    """The single ScubaResults JSON file a run wrote under output_dir."""
-    files = list(output_dir.rglob(f'{RESULTS_FILE_NAME}*.json'))
+    """The single ScubaResults JSON file in this run's report directory."""
+    files = list(output_dir.glob(f'{RESULTS_FILE_NAME}*.json'))
     if len(files) != 1:
         raise RuntimeError(f'Expected one {RESULTS_FILE_NAME} file under {output_dir}, '
                            f'found {len(files)}.')

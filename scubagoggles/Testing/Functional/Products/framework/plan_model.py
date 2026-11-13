@@ -8,7 +8,13 @@ Testing/Functional/README.md for the YAML format.
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Any
+from typing import TypeAlias
+
+
+# Values written into provider JSON, including nested settings and patch data.
+JsonValue: TypeAlias = (
+    str | int | float | bool | None | list['JsonValue'] | dict[str, 'JsonValue']
+)
 
 
 class Outcome(StrEnum):
@@ -31,18 +37,9 @@ class TestDriver(StrEnum):
     LIVE = 'live'
 
 
-class LiveTesting(StrEnum):
-    """Team decision: whether this policy's settings may change in the tenant."""
-
-    ALLOWED = 'allowed'
-    DENIED = 'denied'
-
-
 class WriteApi(StrEnum):
-    """API that can change the policy's settings, if any."""
+    """API used to change settings for a live case."""
 
-    NONE = 'none'
-    UNKNOWN = 'unknown'
     POLICY_API = 'policy_api'
     DIRECTORY_API = 'directory_api'
     CLOUD_IDENTITY_API = 'cloud_identity_api'
@@ -50,12 +47,11 @@ class WriteApi(StrEnum):
 
 
 class Scope(StrEnum):
-    """Where the policy's settings can be applied in the tenant."""
+    """The concrete target scope of a live case."""
 
-    OU_GROUP = 'ou_group'
     OU = 'ou'
+    GROUP = 'group'
     TENANT = 'tenant'
-    UNKNOWN = 'unknown'
 
 
 class PlanError(ValueError):
@@ -63,11 +59,27 @@ class PlanError(ValueError):
 
 
 @dataclass(frozen=True)
+class LiveDefaults:
+    """Optional shared live settings, also used for partial case overrides."""
+
+    write_api: tuple[WriteApi, ...] | None = None
+    scope: Scope | None = None
+
+
+@dataclass(frozen=True)
+class LiveConfig:
+    """A live case's complete configuration after resolving defaults."""
+
+    write_api: tuple[WriteApi, ...]
+    scope: Scope
+
+
+@dataclass(frozen=True)
 class Patch:
     """One named patch helper call from a case."""
 
     helper: str
-    args: Mapping[str, Any] = field(default_factory=dict)
+    args: Mapping[str, JsonValue] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -79,14 +91,15 @@ class PolicyCase:
     name: str
     test_driver: TestDriver
     expected_result: Outcome
-    settings: Mapping[str, Any] = field(default_factory=dict)
+    settings: Mapping[str, JsonValue] = field(default_factory=dict)
     patches: tuple[Patch, ...] = ()
     description: str = ''
+    live: LiveConfig | None = None
 
     @property
     def test_id(self) -> str:
-        """Pytest ID, e.g. GWS.COMMONCONTROLS.4.1-session_12h."""
-        return f'{self.policy_id}-{self.name}'
+        """Identify the policy, driver and descriptive scenario name in pytest."""
+        return f'{self.policy_id}-{self.test_driver}-{self.name}'
 
 
 @dataclass(frozen=True)
@@ -95,8 +108,7 @@ class PolicyPlan:
 
     policy_id: str
     product: str
-    live_testing: LiveTesting
-    write_api: tuple[WriteApi, ...]
-    scope: Scope
+    live_testing: bool
     cases: tuple[PolicyCase, ...]
     reason: str = ''
+    live: LiveDefaults | None = None

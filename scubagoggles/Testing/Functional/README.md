@@ -44,7 +44,8 @@ Every case names its `test_driver`:
   written to. Every policy can have cached cases.
 - **`live`** will change the setting in the tenant, run ScubaGoggles, and restore
   it. Live mode is not implemented yet. Live cases are only allowed on policies
-  whose plan entry says `live_testing: allowed` and names a `write_api`.
+  whose plan entry says `live_testing: true`. Each live case must resolve to a
+  write API and a concrete scope using the shared `live` defaults and any case overrides.
 
 `--test-driver` picks which cases run (default `cached`). Cached and live cases
 for the same policy sit side by side in the same plan entry.
@@ -96,37 +97,38 @@ Without `--cached-export` or `--cached-collect`, cached cases are skipped.
 
 ### Select cases
 
-Test IDs are `<policy ID>-<case name>`, so `-k` selects by product, policy, or case:
+Test IDs are `<policy ID>-<driver>-<case name>`. Names can be descriptive sentences;
+`-k` selects by product, policy, driver, or words in the name:
 
 ```sh
 -k COMMONCONTROLS                    # one product
 -k "GWS.COMMONCONTROLS.4.1-"         # one policy
 -k "4.1- or 5.3-"                    # several policies
--k session_24h                       # one case
+-k "session and 24"                 # the 24-hour session case
+-k "minimum and 16"                 # the 16-character minimum password case
 ```
 
 `-k` matches substrings, so end a policy ID with `-`: `GWS.DRIVEDOCS.1.1`
-alone would also select 1.10 and 1.11.
+alone would also select 1.10 and 1.11. Use `and`/`or` between words when selecting
+descriptive names; quoting a whole sentence does not make it an exact-name match.
 
 ## Add a test case
 
 1. Open `Products/TestPlans/<product>.yaml` and find the policy's entry.
-2. Add a case under `cases`. If the entry only has a `reason` because cases were
-   not written yet, remove the `reason`.
+2. Add a case under `cases`. Remove a stale `reason` such as "Cases not written
+   yet", or update it if it still explains partial coverage.
 3. Run it: `python -m pytest scubagoggles/Testing/Functional/Products -v --cached-export=<ScubaResults file> -k "<policy ID>-"`.
 
 ```yaml
 GWS.COMMONCONTROLS.4.1:  # security_session_controls
-  live_testing: denied
-  write_api: unknown
-  scope: unknown
+  live_testing: false
   cases:
-    - name: session_12h
+    - name: Session duration of 12 hours is compliant
       test_driver: cached
       expected_result: Pass
       settings:
         security_session_controls.webSessionDuration: 43200s
-    - name: session_24h
+    - name: Session duration of 24 hours is noncompliant
       test_driver: cached
       expected_result: Fail
       settings:
@@ -140,17 +142,24 @@ problem. The same checks run in the unit test suite, so they also run in CI.
 
 | Field | Required | Meaning |
 |---|---|---|
-| `name` | Yes | Lowercase letters, digits and underscores; unique per policy and driver. |
+| `name` | Yes | Nonempty, single-line text; spaces and punctuation are accepted. Surrounding spaces are trimmed; names must be unique per policy and driver. |
 | `test_driver` | Yes | `cached` or `live`. |
 | `expected_result` | Yes | The report label: `Pass`, `Fail`, `Warning`, `No events found`, `N/A` or `Error`. |
 | `settings` | No | `setting_type.fieldName: value` pairs. |
 | `patch` | No | Named patch helpers for data that isn't a setting (cached only). |
 | `description` | No | Why the case exists, when the name isn't enough. |
+| `live` | For live cases when defaults are insufficient | Overrides for `write_api` and/or `scope`. Omit this block on cached cases. |
 
 `settings` keys are the provider's exported setting names, the same names the
 Rego prerequisites (`policy/security_password.minimumLength`) and the export's
-`missing_policies` use. A key must be declared in `policy_api.py` or used by the
-product's Rego file, which catches misspellings. A case can set several fields.
+`missing_policies` use. The exact section/field pair must be declared in
+`policy_api.py` or named in the product's Rego prerequisites. A case can set
+several fields.
+
+Settings and patch arguments accept JSON-compatible values: strings, integers,
+floats, booleans, null, lists, and dictionaries with string keys. Quote dates to
+keep YAML from turning them into date objects. Duplicate YAML keys, malformed
+case fields, and missing or unexpected helper arguments fail during collection.
 
 A cached case sets each value on the top-level OU, and on any OU or group that
 already overrides that setting type in the export. Views that inherit the setting
@@ -162,7 +171,7 @@ a Policy API setting, such as log events, DNS records, directory data, or a
 setting the provider couldn't read:
 
 ```yaml
-    - name: session_duration_missing
+    - name: Missing session duration produces an error
       test_driver: cached
       expected_result: Error
       patch:
@@ -173,6 +182,8 @@ setting the provider couldn't read:
 To add a helper, write a function in `Products/framework/patch_helpers.py` that takes the
 export dict followed by keyword arguments, changes the export in place, and is
 decorated with `@patch_helper`. Plans can then name it.
+Plan loading validates the `missing_setting` helper's setting name using the
+same rules as `settings`.
 
 `N/A` and `No events found` are valid expected results. An `N/A` case only checks
 that an unimplemented policy is reported as such; it doesn't test the policy.
@@ -184,14 +195,60 @@ entry is the policy's coverage decision.
 
 | Field | Values | Meaning |
 |---|---|---|
-| `live_testing` | `allowed`, `denied` | Whether the team allows this policy's settings to change in the tenant (allowlist vs denylist). |
-| `write_api` | `none`, `unknown`, `policy_api`, `directory_api`, `cloud_identity_api`, `group_settings_api`, or a list | The API that can change the setting. |
-| `scope` | `ou_group`, `ou`, `tenant`, `unknown` | Where the setting can be applied. Use `unknown` unless the docs or the Admin console confirm it. |
+| `live_testing` | `true` or `false` (required boolean) | Whether the team permits live cases for this policy. Use an unquoted YAML boolean, not `allowed`, `denied`, `"true"`, or `"false"`. |
+| `live` | Optional mapping | Shared `write_api` and/or `scope` defaults for live cases. Requires `live_testing: true`. Cached-only policies do not need this block. |
 | `cases` | list | The policy's cases. |
 | `reason` | text | Required when there are no cases, e.g. `Not-Implemented in Rego.` |
 
-A `live` case requires `live_testing: allowed` and a `write_api` other than
-`none` or `unknown`, and can't use patch helpers.
+`reason` is required when `cases` is omitted or empty. It is optional alongside
+populated `cases`, and never skips those cases. If present, it must be text;
+`reason:` with no value is YAML null and is invalid.
+
+### Shared live configuration
+
+`live_testing: true` records permission to define live cases. It does not mean a
+write API is available or enable the unfinished live runner. A placeholder policy
+can have `live_testing: true` without a `live` block.
+
+Both policy-level `live` defaults and case-level `live` overrides accept:
+
+| Field | Values | Meaning |
+|---|---|---|
+| `write_api` | `policy_api`, `directory_api`, `cloud_identity_api`, `group_settings_api`, or a nonempty list of these | APIs used by the live case. A case override replaces the entire default API list. |
+| `scope` | `ou`, `group`, `tenant` | The concrete scope for this scenario. Choose a scope the policy supports; `ou_group` and `unknown` are not execution scopes. |
+
+The loader merges these fields for each live case and requires both to be known.
+A case can supply all its live configuration or inherit either field. Missing
+fields are acceptable in policy defaults until a live case needs them. Cached
+cases do not inherit live configuration. Live cases cannot use patch helpers.
+
+For a policy that supports OU and group changes, an entry could contain:
+
+```yaml
+live_testing: true
+live:
+  write_api: [policy_api]
+  scope: ou
+cases:
+  - name: Cached compliant configuration
+    test_driver: cached
+    expected_result: Pass
+  - name: Compliant configuration in an organizational unit
+    test_driver: live
+    expected_result: Pass
+    # Inherits both API and scope.
+  - name: Compliant configuration in a group
+    test_driver: live
+    expected_result: Pass
+    live:
+      scope: group
+      # Inherits the API; overrides only the scope.
+```
+
+Case overrides cannot change the policy's `live_testing` decision. Policies with
+`live_testing: false` reject live defaults and live cases. API names, scopes and
+test drivers remain named choices because they select behavior rather than
+enable or disable it.
 
 ### Add a product
 
@@ -205,8 +262,9 @@ Each cached case writes normal ScubaGoggles output for its product to its pytest
 temporary directory. That includes `ScubaResults_*.json` (its `Raw` section is the
 patched export), the HTML reports, `TestResults.json` and the CSV files.
 
-A failing assertion prints the product's HTML report path. A fresh collection's
-output, including its unpatched export, is saved under a `cached-source`
+A failing assertion prints the product's HTML report path. Results are read from
+the directory returned by that run, without searching earlier report directories.
+A fresh collection's output, including its unpatched export, is saved under a `cached-source`
 temporary directory. Exports and reports
 made from a real tenant are tenant data; don't commit them.
 

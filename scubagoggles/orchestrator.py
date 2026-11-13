@@ -946,9 +946,11 @@ class Orchestrator:
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
 
-        # Credentials are only used for the export; a cached run that skips
-        # the export (--runcached --skipexport) never contacts Google.
-        needs_credentials = not args.usemetadataserverauth and not args.skipexport
+        # Credential files are unnecessary for metadata auth or cached runs
+        # that skip the provider export.
+        needs_credentials = not args.usemetadataserverauth and not (
+            args.runcached and args.skipexport
+        )
 
         if needs_credentials:
             if args.credentials is None:

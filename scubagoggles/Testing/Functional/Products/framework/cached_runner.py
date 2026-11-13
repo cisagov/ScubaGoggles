@@ -34,15 +34,25 @@ def load_export(path: Path) -> dict:
     for key, kind in required.items():
         if not isinstance(data.get(key), kind):
             raise ValueError(f'Provider export requires {key} ({kind.__name__}).')
-    if not data['tenant_info'].get('topLevelOU'):
-        raise ValueError('Provider export requires tenant_info.topLevelOU.')
+    top_ou = data['tenant_info'].get('topLevelOU')
+    if not isinstance(top_ou, str) or not top_ou:
+        raise ValueError('Provider export requires tenant_info.topLevelOU as a nonempty string.')
+    if top_ou not in data['policies']:
+        raise ValueError(f'The export has no policies for the top-level OU {top_ou!r}.')
+    for view, settings in data['policies'].items():
+        if not isinstance(settings, dict):
+            raise ValueError(f'Provider export policies for {view!r} must be an object.')
+        for section, fields in settings.items():
+            if not isinstance(fields, dict):
+                raise ValueError(f'Provider export setting {view!r}/{section} must be an object.')
     return data
 
 
 def collect_export(output_dir: Path, products: list[str], cli_args: list[str]) -> dict:
     """Run a normal `scubagoggles gws` once and return the export it made."""
-    run_scubagoggles('--baselines', *products, '--outputpath', str(output_dir), *cli_args)
-    return load_export(find_results_file(output_dir))
+    report_dir = run_scubagoggles('--baselines', *products,
+                                  '--outputpath', str(output_dir), *cli_args)
+    return load_export(find_results_file(report_dir))
 
 
 def apply_case(data: dict, case: PolicyCase):
@@ -70,8 +80,9 @@ class CachedRunner:
         # Bind replayed exports to this checkout's baseline versions.
         data['baseline_suffix'], data['baseline_versions'] = baseline_versions(case.product)
         output_dir.mkdir(parents=True, exist_ok=True)
-        (output_dir / f'{PROVIDER_FILE_NAME}.json').write_text(json.dumps(data),
-                                                              encoding='utf-8')
-        run_scubagoggles('--baselines', case.product, '--outputpath', str(output_dir),
-                         '--runcached', '--skipexport', *self._cli_args)
-        return read_policy_result(output_dir, case)
+        with (output_dir / f'{PROVIDER_FILE_NAME}.json').open('w', encoding='utf-8') as stream:
+            json.dump(data, stream)
+        report_dir = run_scubagoggles('--baselines', case.product,
+                                      '--outputpath', str(output_dir),
+                                      '--runcached', '--skipexport', *self._cli_args)
+        return read_policy_result(report_dir, case)

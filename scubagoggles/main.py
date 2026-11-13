@@ -511,9 +511,7 @@ def get_version_args(parser: argparse.ArgumentParser):
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """Builds the scubagoggles command line parser, including every
-    subcommand.
-    """
+    """Build the command-line parser without parsing arguments or running a command."""
 
     overall_description = """SCuBA Security Baseline Conformance Automation Tool
 
@@ -610,8 +608,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def dive():
-    """Takes in the arguments needed to run scubagoggles
-    """
+    """Parse command-line arguments and run the selected ScubaGoggles command."""
 
     scuba_parser = ScubaArgumentParser(create_parser())
 
