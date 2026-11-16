@@ -1453,6 +1453,7 @@ Multi-party approval SHOULD be required for role management.
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
   - [TT1136: Create Account](https://attack.mitre.org/techniques/T1136/)
     - [TT1136:003 Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
+
 ### Resources
 -	[GWS Admin Help \| Multi-party approval for sensitive actions](https://support.google.com/a/answer/13790448?hl=en-Link)
 
