@@ -65,8 +65,19 @@ directory, not the executable, to use another one.
 
 ## Run the cached tests
 
-Cached cases need a source export from a real tenant. There are two ways to get
-one.
+Choose one option to provide the session's source export:
+
+| Option | Behavior |
+|---|---|
+| `--collect` | Collect one export from the tenant using read-only API calls. |
+| `--export-file <path>` | Replay an existing JSON export without Google authentication. |
+
+`--collect` is a boolean flag: present means true, omitted means false. It takes
+no value. `--export-file` takes a file path. These options are alternatives and
+cannot be combined.
+
+`--test-driver` selects how cases execute. Cached is the default driver, so it
+can be omitted.
 
 **Reuse output from an earlier run.** Pass a `ScubaResults_*.json` file (its
 `Raw` section is used) or a `ProviderSettingsExport.json` from a recent
@@ -74,7 +85,7 @@ one.
 read once and never modified:
 
 ```sh
-python -m pytest scubagoggles/Testing/Functional/Products -v --cached-export=/path/to/ScubaResults_<uuid>.json
+python -m pytest scubagoggles/Testing/Functional/Products -v --export-file="/path/to/ScubaResults_<uuid>.json"
 ```
 
 **Collect from the tenant.** This does one normal `scubagoggles gws` run per
@@ -82,7 +93,7 @@ session, using read-only API calls, for only the products the selected cases
 need:
 
 ```sh
-python -m pytest scubagoggles/Testing/Functional/Products -v --cached-collect --subjectemail=admin@example.com
+python -m pytest scubagoggles/Testing/Functional/Products -v --collect --subjectemail=admin@example.com
 ```
 
 `--opapath`, `--credentials`, `--subjectemail` and `--customerid` are passed
@@ -90,10 +101,11 @@ straight to `scubagoggles gws`, so they mean the same thing and have the same
 defaults as on the command line. For example, the credentials default to the
 file saved by `scubagoggles setup`. Include `--subjectemail` for a service account
 using domain-wide delegation; omit it for OAuth. Collection uses empty
-break-glass and exclusion lists. It cannot be combined with `--cached-export` or
-with pytest-xdist `-n`.
+break-glass and exclusion lists. Fresh collection cannot be combined with
+pytest-xdist `-n`.
 
-Without `--cached-export` or `--cached-collect`, cached cases are skipped.
+Without `--collect` or `--export-file`, cached cases are skipped. `--collect-only` lists the
+cases without loading an export or contacting Google.
 
 ### Select cases
 
@@ -117,7 +129,7 @@ descriptive names; quoting a whole sentence does not make it an exact-name match
 1. Open `Products/TestPlans/<product>.yaml` and find the policy's entry.
 2. Add a case under `cases`. Remove a stale `reason` such as "Cases not written
    yet", or update it if it still explains partial coverage.
-3. Run it: `python -m pytest scubagoggles/Testing/Functional/Products -v --cached-export=<ScubaResults file> -k "<policy ID>-"`.
+3. Run it: `python -m pytest scubagoggles/Testing/Functional/Products -v --export-file="<ScubaResults file>" -k "<policy ID>-"`.
 
 ```yaml
 GWS.COMMONCONTROLS.4.1:  # security_session_controls

@@ -17,6 +17,9 @@ from scubagoggles.Testing.Functional.Products.framework.scuba_app import (
 
 def load_export(path: Path) -> dict:
     """Read a provider export or the Raw section of a ScubaResults file."""
+    if path.is_dir():
+        raise ValueError('The cached export must be a JSON file, not a directory. '
+                         'Select a ScubaResults or ProviderSettingsExport JSON file.')
     with path.open(encoding='utf-8') as stream:
         data = json.load(stream)
     if isinstance(data, dict) and 'Raw' in data:
@@ -43,8 +46,11 @@ def load_export(path: Path) -> dict:
         if not isinstance(settings, dict):
             raise ValueError(f'Provider export policies for {view!r} must be an object.')
         for section, fields in settings.items():
-            if not isinstance(fields, dict):
-                raise ValueError(f'Provider export setting {view!r}/{section} must be an object.')
+            # Rule sections contain lists of objects; derived dlp_pii contains
+            # a list of strings. Preserve these alongside ordinary settings.
+            if not isinstance(fields, (dict, list)):
+                raise ValueError(f'Provider export setting {view!r}/{section} '
+                                 'must be an object or a list.')
     return data
 
 

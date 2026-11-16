@@ -37,8 +37,14 @@ PLAN_FILE = PRODUCTS_DIR / 'TestPlans' / 'commoncontrols.yaml'
 def source_export_fixture():
     """A minimal synthetic export: enough for the Orchestrator and reporter to
     run Common Controls, with no tenant data."""
-    settings = {'security_session_controls': {'webSessionDuration': '86400s'},
-                'security_password': {'minimumLength': 8}}
+    settings = {
+        'security_session_controls': {'webSessionDuration': '86400s'},
+        'security_password': {'minimumLength': 8},
+        'rule_dlp': [{'displayName': 'Example DLP rule', 'state': 'ACTIVE'}],
+        'rule_system_defined_alerts': [
+            {'displayName': 'Example system alert', 'state': 'ACTIVE'}],
+        'dlp_pii': ['drive'],
+    }
     return {
         'tenant_info': {'ID': 'synthetic-customer', 'domain': 'example.invalid',
                         'topLevelOU': 'Example'},
@@ -481,10 +487,25 @@ def test_missing_setting_marks_top_level_field(source_export):
 
 @pytest.mark.parametrize('wrapped', [False, True])
 def test_load_export_formats(tmp_path, source_export, wrapped):
-    """Support both raw provider files and the application result wrapper."""
+    """Preserve object and list sections in raw exports and result wrappers."""
     path = tmp_path / 'export.json'
     path.write_text(json.dumps({'Raw': source_export} if wrapped else source_export))
     assert load_export(path) == source_export
+
+
+def test_load_export_preserves_empty_rule_lists(tmp_path, source_export):
+    """A tenant with no DLP rules still has a valid export."""
+    source_export['policies']['Example']['rule_dlp'] = []
+    source_export['policies']['Example']['dlp_pii'] = []
+    path = tmp_path / 'export.json'
+    path.write_text(json.dumps(source_export), encoding='utf-8')
+    assert load_export(path) == source_export
+
+
+def test_load_export_rejects_directory(tmp_path):
+    """Explain directory input before Windows reports a misleading permission error."""
+    with pytest.raises(ValueError, match='JSON file, not a directory'):
+        load_export(tmp_path)
 
 
 @pytest.mark.parametrize('data', [[], {}, {'policies': []}, {'Raw': []}, 'no_uuid'])
@@ -554,6 +575,9 @@ def test_collect_export_runs_scubagoggles(tmp_path, monkeypatch, source_export, 
     provider.call_gws_providers.assert_called_once_with(['commoncontrols'], True)
     assert result['unsuccessful_calls'] == ['read/failure']
     assert result['missing_policies'] == ['security_password.minimumLength']
+    for section in ('rule_dlp', 'rule_system_defined_alerts', 'dlp_pii'):
+        assert (result['policies']['Example'][section]
+                == source_export['policies']['Example'][section])
     assert len(evaluator[0]) == 1
 
 
@@ -654,17 +678,61 @@ from scubagoggles.Testing.Functional.Products.framework.plan_model import Outcom
 CASES = [PolicyCase('GWS.COMMONCONTROLS.4.1', 'commoncontrols', 'a', TestDriver.CACHED, Outcome.PASS),
          PolicyCase('GWS.GMAIL.1.1', 'gmail', 'b', TestDriver.CACHED, Outcome.PASS)]
 @pytest.mark.parametrize('scenario', CASES)
-def test_snapshot(scenario, provider_export):
+def test_snapshot(scenario, provider_export, pytestconfig):
+    assert pytestconfig.getoption('--collect') is True
     assert provider_export['tenant_info']['topLevelOU'] == 'Example'
 """)
-    result = pytester.runpytest('--cached-collect', '--credentials=fake.json', '-q')
+    result = pytester.runpytest('--collect', '--credentials=fake.json', '-q')
+    result.assert_outcomes(passed=2)
+
+
+def test_session_fixture_replays_once(pytester, source_export):
+    """A file source is read once without collection, including paths with spaces."""
+    export_dir = pytester.path / 'saved reports'
+    export_dir.mkdir()
+    path = export_dir / 'ScubaResults.json'
+    path.write_text(json.dumps({'Raw': source_export}), encoding='utf-8')
+    stub = """
+_load_count = 0
+_load_export = load_export
+def load_export(path):
+    global _load_count
+    _load_count += 1
+    assert _load_count == 1
+    return _load_export(path)
+def collect_export(*args):
+    raise AssertionError('Replay must not collect tenant data')
+"""
+    pytester.makeconftest(functional_conftest() + stub)
+    pytester.makepyfile("""
+import pytest
+@pytest.mark.parametrize('index', [0, 1])
+def test_snapshot(index, provider_export, pytestconfig):
+    assert pytestconfig.getoption('--collect') is False
+    assert provider_export['tenant_info']['topLevelOU'] == 'Example'
+""")
+    result = pytester.runpytest(f'--export-file={path}', '-q')
     result.assert_outcomes(passed=2)
 
 
 def test_source_selection_is_explicit(pytester):
-    """Default runs skip; conflicting options and the live driver fail."""
+    """Default runs skip; conflicting sources and invalid options fail."""
     pytester.makeconftest(functional_conftest())
     pytester.makepyfile('def test_source(provider_export): assert provider_export')
     pytester.runpytest('-q').assert_outcomes(skipped=1)
-    for args in (['--cached-export=a.json', '--cached-collect'], ['--test-driver=live']):
+    for args in (['--collect', '--export-file=a.json'], ['--export-file'],
+                 ['--collect=true'], ['--test-driver=live']):
         assert pytester.runpytest(*args).ret == pytest.ExitCode.USAGE_ERROR
+
+
+def test_collect_only_does_not_acquire_export(pytester):
+    """Pytest's --collect-only still lists tests without accessing tenant data."""
+    stub = """
+def collect_export(*args):
+    raise AssertionError('Listing tests must not collect tenant data')
+"""
+    pytester.makeconftest(functional_conftest() + stub)
+    pytester.makepyfile('def test_source(provider_export): assert provider_export')
+    result = pytester.runpytest('--collect', '--collect-only', '-q')
+    assert result.ret == pytest.ExitCode.OK
+    result.stdout.fnmatch_lines(['*1 test collected*'])

@@ -28,11 +28,11 @@ def gws_cli_args(config, *options: str) -> list[str]:
 @pytest.fixture(scope='session', name='provider_export')
 def provider_export_fixture(pytestconfig, tmp_path_factory, request):
     """Load or collect exactly one source export for all selected cached cases."""
-    path = pytestconfig.getoption('--cached-export')
-    if path:
+    path = pytestconfig.getoption('--export-file')
+    if path is not None:
         return load_export(path)
-    if not pytestconfig.getoption('--cached-collect'):
-        pytest.skip('Pass --cached-export or --cached-collect to run cached cases.')
+    if not pytestconfig.getoption('--collect'):
+        pytest.skip('Pass --collect or --export-file=<JSON file> to run cached cases.')
 
     products = sorted({case.product for case in selected_cases(request.session.items)
                        if case.test_driver is TestDriver.CACHED})
