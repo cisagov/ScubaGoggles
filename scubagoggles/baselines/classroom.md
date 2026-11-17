@@ -220,7 +220,7 @@ Class creation SHOULD be restricted to verified teachers only.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5), AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1656: Impersonation](https://attack.mitre.org/techniques/T1656/)
-  - [T534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
     - [T1598:002: Phishing for Information: Spearphishing Attachment](https://attack.mitre.org/techniques/T1598/002/)
     - [T1598:003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
