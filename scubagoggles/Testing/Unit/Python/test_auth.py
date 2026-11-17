@@ -120,6 +120,7 @@ class TestGwsAuth:
 
         mock_flow = mocker.Mock()
         mock_flow.run_local_server.return_value = mock_fresh_credentials
+        mocker.patch('scubagoggles.auth.webbrowser.get')
 
         mocker.patch.object(
             InstalledAppFlow, 'from_client_secrets_file',
@@ -132,7 +133,7 @@ class TestGwsAuth:
             str(credentials_file), OAUTH_SCOPES
         )
         mock_flow.run_local_server.assert_called_once_with(
-            timeout_seconds=300, prompt='consent'
+            timeout_seconds=300, prompt='consent', open_browser=True
         )
         assert auth.credentials is mock_fresh_credentials
 

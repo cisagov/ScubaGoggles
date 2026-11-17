@@ -5,6 +5,7 @@ This module uses a local credential.json file to authenticate to a GWS org
 """
 
 import json
+import webbrowser
 from pathlib import Path
 
 from google.auth import iam
@@ -74,18 +75,24 @@ class GwsAuth:
         if self._token:
             return
 
-        # There is no existing token file, so the user will have to authenticate
-        # using a browser on the current system.  There doesn't seem to be an
-        # alternative for users without access to a browser (there was a
-        # run_console() method that was removed in a prior release that may
-        # have worked when no browser was available).
+        # There is no existing token file, so the user will have to authenticate.
         credentials_file = str(self._credentials_path)
         flow = InstalledAppFlow.from_client_secrets_file(credentials_file,
                                                          OAUTH_SCOPES)
 
+        # Containers and other headless environments may not have a browser.
+        # In that case, run_local_server prints the authorization URL so the
+        # user can open it in a browser on another device or host.
+        try:
+            webbrowser.get()
+            open_browser = True
+        except webbrowser.Error:
+            open_browser = False
+
         try:
             self._token = flow.run_local_server(
-                timeout_seconds=300, prompt='consent')
+                timeout_seconds=300, prompt='consent',
+                open_browser=open_browser)
         except AttributeError as ae:
             raise RuntimeError('Google authorization timeout') from ae
 
