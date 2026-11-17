@@ -14,7 +14,6 @@ from scubagoggles.Testing.Functional.Products.framework.scuba_app import (
     read_policy_result, run_scubagoggles,
 )
 
-
 def load_export(path: Path) -> dict:
     """Read a provider export or the Raw section of a ScubaResults file."""
     if path.is_dir():
@@ -53,13 +52,11 @@ def load_export(path: Path) -> dict:
                                  'must be an object or a list.')
     return data
 
-
 def collect_export(output_dir: Path, products: list[str], cli_args: list[str]) -> dict:
     """Run a normal `scubagoggles gws` once and return the export it made."""
     report_dir = run_scubagoggles('--baselines', *products,
                                   '--outputpath', str(output_dir), *cli_args)
     return load_export(find_results_file(report_dir))
-
 
 def apply_case(data: dict, case: PolicyCase):
     """Apply the case's settings, then its patches, to an export in place."""
@@ -67,7 +64,6 @@ def apply_case(data: dict, case: PolicyCase):
         set_setting(data, key, value)
     for patch in case.patches:
         PATCH_HELPERS[patch.helper](data, **patch.args)
-
 
 # One run method is the intended public interface.
 # pylint: disable-next=too-few-public-methods

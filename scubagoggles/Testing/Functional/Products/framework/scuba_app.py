@@ -1,18 +1,24 @@
-"""Run ScubaGoggles the way `scubagoggles gws` does, for the test runners.
+"""Adapt ScubaGoggles execution and report output to product test cases.
 
-Runners go through the real argument parser and Orchestrator, so functional
-tests exercise the same export, Rego, and report code that users run.  This
-module only adds what tests need around them: skipping the release check,
-finding the results file, and reading one policy's report row.
+run_scubagoggles accepts GWS command arguments and returns the directory written
+by Orchestrator. It supplies noninteractive options and fixed JSON filename
+prefixes, while allowing execution errors to propagate to pytest. The test
+orchestrator disables the PyPI update check so cached replay needs no network.
+
+Report helpers require exactly one ScubaResults file and one matching control
+row. They preserve the reported outcome and attach an HTML report path to
+assertion failures. Policy IDs are matched without their version suffixes.
+
+Baseline helpers cache MarkdownParser output for plan validation and for
+updating replayed exports to the policy versions in the current checkout.
 """
 
 from dataclasses import dataclass
 from functools import cache
-import json
 from pathlib import Path
-import re
 
 import scubagoggles
+from scubagoggles.diff import load_report, split_version
 from scubagoggles.main import create_parser
 from scubagoggles.orchestrator import Orchestrator
 from scubagoggles.reporter.md_parser import MarkdownParser
@@ -22,8 +28,6 @@ from scubagoggles.Testing.Functional.Products.framework.plan_model import Policy
 PACKAGE_DIR = Path(scubagoggles.__file__).parent
 PROVIDER_FILE_NAME = 'ProviderSettingsExport'
 RESULTS_FILE_NAME = 'ScubaResults'
-_VERSION_SUFFIX_RE = re.compile(r'v[\d.]+$')
-
 
 class FunctionalTestOrchestrator(Orchestrator):
     """The real Orchestrator without the PyPI release check, which would
@@ -31,7 +35,6 @@ class FunctionalTestOrchestrator(Orchestrator):
 
     def notify_user_if_new_release_is_available(self):
         """Skip the release check."""
-
 
 def run_scubagoggles(*argv: str) -> Path:
     """Run `scubagoggles gws <argv>` quietly and return its report directory."""
@@ -43,7 +46,6 @@ def run_scubagoggles(*argv: str) -> Path:
     FunctionalTestOrchestrator(args).start_automation()
     return args.outputpath
 
-
 def find_results_file(output_dir: Path) -> Path:
     """The single ScubaResults JSON file in this run's report directory."""
     files = list(output_dir.glob(f'{RESULTS_FILE_NAME}*.json'))
@@ -51,7 +53,6 @@ def find_results_file(output_dir: Path) -> Path:
         raise RuntimeError(f'Expected one {RESULTS_FILE_NAME} file under {output_dir}, '
                            f'found {len(files)}.')
     return files[0]
-
 
 @dataclass(frozen=True)
 class PolicyResult:
@@ -69,13 +70,12 @@ class PolicyResult:
             f'got {self.outcome}. {self.details} Report: {self.report_path}'
         )
 
-
 def read_policy_result(output_dir: Path, case: PolicyCase) -> PolicyResult:
     """Read the case's policy row from the run's ScubaResults file."""
     results_file = find_results_file(output_dir)
-    results = json.loads(results_file.read_text(encoding='utf-8'))
+    results = load_report(results_file)
     rows = [row for group in results['Results'][case.product] for row in group['Controls']
-            if unversioned(row['Control ID']) == case.policy_id]
+            if split_version(row['Control ID'])[0] == case.policy_id]
     if len(rows) != 1:
         raise RuntimeError(f'Expected one report row for {case.policy_id}, got {len(rows)}.')
     row = rows[0]
@@ -85,12 +85,6 @@ def read_policy_result(output_dir: Path, case: PolicyCase) -> PolicyResult:
                      / f'{case.product.capitalize()}Report.html'),
     )
 
-
-def unversioned(policy_id: str) -> str:
-    """GWS.COMMONCONTROLS.4.1v1 -> GWS.COMMONCONTROLS.4.1"""
-    return _VERSION_SUFFIX_RE.sub('', policy_id)
-
-
 @cache
 def _baseline(product: str) -> tuple[list, str, dict]:
     """Baseline groups, default version suffix, and per-policy versions."""
@@ -98,12 +92,10 @@ def _baseline(product: str) -> tuple[list, str, dict]:
     groups = parser.parse_baselines({product})[product]
     return groups, parser.default_version, parser.policy_version_map
 
-
 def baseline_policy_ids(product: str) -> set[str]:
     """Unversioned policy IDs in this checkout's baseline for product."""
     groups, _, _ = _baseline(product)
-    return {unversioned(control['Id']) for group in groups for control in group['Controls']}
-
+    return {split_version(control['Id'])[0] for group in groups for control in group['Controls']}
 
 def baseline_versions(product: str) -> tuple[str, dict]:
     """This checkout's default version suffix and per-policy versions."""

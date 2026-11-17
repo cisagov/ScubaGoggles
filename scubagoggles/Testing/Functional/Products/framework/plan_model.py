@@ -1,7 +1,7 @@
 """The test plan vocabulary shared by the loader and the runners.
 
 A product's test plan (Products/TestPlans/<product>.yaml) has one PolicyPlan
-per baseline policy: its live configuration and its PolicyCases.  See
+per baseline policy: its live configuration and its PolicyCases. See
 Testing/Functional/README.md for the YAML format.
 """
 
@@ -10,12 +10,10 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import TypeAlias
 
-
 # Values written into provider JSON, including nested settings and patch data.
 JsonValue: TypeAlias = (
     str | int | float | bool | None | list['JsonValue'] | dict[str, 'JsonValue']
 )
-
 
 class Outcome(StrEnum):
     """Result labels shown in the ScubaGoggles report."""
@@ -27,7 +25,6 @@ class Outcome(StrEnum):
     NOT_IMPLEMENTED = 'N/A'
     ERROR = 'Error'
 
-
 class TestDriver(StrEnum):
     """How a case runs: against a patched export copy, or the live tenant."""
 
@@ -35,7 +32,6 @@ class TestDriver(StrEnum):
 
     CACHED = 'cached'
     LIVE = 'live'
-
 
 class WriteApi(StrEnum):
     """API used to change settings for a live case."""
@@ -45,7 +41,6 @@ class WriteApi(StrEnum):
     CLOUD_IDENTITY_API = 'cloud_identity_api'
     GROUP_SETTINGS_API = 'group_settings_api'
 
-
 class Scope(StrEnum):
     """The concrete target scope of a live case."""
 
@@ -53,10 +48,8 @@ class Scope(StrEnum):
     GROUP = 'group'
     TENANT = 'tenant'
 
-
 class PlanError(ValueError):
     """A test plan is malformed; the message lists every problem found."""
-
 
 @dataclass(frozen=True)
 class LiveDefaults:
@@ -65,7 +58,6 @@ class LiveDefaults:
     write_api: tuple[WriteApi, ...] | None = None
     scope: Scope | None = None
 
-
 @dataclass(frozen=True)
 class LiveConfig:
     """A live case's complete configuration after resolving defaults."""
@@ -73,14 +65,12 @@ class LiveConfig:
     write_api: tuple[WriteApi, ...]
     scope: Scope
 
-
 @dataclass(frozen=True)
 class Patch:
     """One named patch helper call from a case."""
 
     helper: str
     args: Mapping[str, JsonValue] = field(default_factory=dict)
-
 
 @dataclass(frozen=True)
 class PolicyCase:
@@ -100,7 +90,6 @@ class PolicyCase:
     def test_id(self) -> str:
         """Identify the policy, driver and descriptive scenario name in pytest."""
         return f'{self.policy_id}-{self.test_driver}-{self.name}'
-
 
 @dataclass(frozen=True)
 class PolicyPlan:

@@ -28,7 +28,7 @@ Functional/
       plan_loader.py       # loads and validates TestPlans/*.yaml
       patch_helpers.py     # functions that edit an export for cached cases
       cached_runner.py     # the cached test driver (live_runner.py will sit beside it)
-      scuba_app.py         # runs `scubagoggles gws` in-process; reads report rows
+      scuba_app.py         # adapts application runs, report rows, and baseline IDs for tests
 ```
 
 Run pytest against `Products/` or `SmokeTests/` directly. Running all of

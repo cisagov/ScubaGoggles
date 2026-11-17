@@ -29,7 +29,6 @@ _CASE_KEYS = {'name', 'test_driver', 'expected_result', 'settings', 'patch', 'de
 _SETTING_KEY_RE = re.compile(r'^([a-z0-9_]+)\.([A-Za-z0-9]+)$')
 _REGO_SETTING_RE = re.compile(r'"policy/([a-z0-9_]+\.[A-Za-z0-9]+)"')
 
-
 # SafeLoader combines PyYAML's reader, scanner, parser and constructor classes.
 # pylint: disable-next=too-many-ancestors
 class _PlanLoader(yaml.SafeLoader):
@@ -49,14 +48,12 @@ class _PlanLoader(yaml.SafeLoader):
             mapping[key] = self.construct_object(value_node, deep=deep)
         return mapping
 
-
 def load_plans(directory: Path) -> list[PolicyPlan]:
     """Load and validate every product test plan in directory."""
     plans = []
     for path in sorted(directory.glob('*.yaml')):
         plans.extend(load_plan(path))
     return plans
-
 
 def load_plan(path: Path) -> list[PolicyPlan]:
     """Load one product's test plan; raise PlanError listing every problem."""
@@ -90,10 +87,8 @@ def load_plan(path: Path) -> list[PolicyPlan]:
         raise PlanError(f'{path.name} has problems:\n{details}')
     return plans
 
-
 def _policy_sort_key(policy_id: str) -> list[int]:
     return [int(part) for part in policy_id.split('.')[2:]]
-
 
 @cache
 def _rego_settings(product: str) -> frozenset[str]:
@@ -102,7 +97,6 @@ def _rego_settings(product: str) -> frozenset[str]:
     return frozenset(key for name in (f'{product.capitalize()}.rego', 'Utils.rego')
                      for key in _REGO_SETTING_RE.findall(
                          (rego_dir / name).read_text(encoding='utf-8')))
-
 
 def _read_policy(policy_id: str, product: str, entry, problems: list) -> PolicyPlan | None:
     if not isinstance(entry, dict):
@@ -131,7 +125,6 @@ def _read_policy(policy_id: str, product: str, entry, problems: list) -> PolicyP
             problems.append(f'{case.test_id}: patch helpers only apply to cached cases')
     return PolicyPlan(policy_id, product, live_testing, tuple(cases), live=defaults)
 
-
 def _read_cases(raw, policy_id: str, product: str, problems: list, *,
                 live_defaults: LiveDefaults | None = None) -> list[PolicyCase]:
     if not isinstance(raw, list):
@@ -149,7 +142,6 @@ def _read_cases(raw, policy_id: str, product: str, problems: list, *,
         seen.add((case.test_driver, case.name))
         cases.append(case)
     return cases
-
 
 def _read_case(policy_id: str, product: str, index: int, raw,
                problems: list, *, live_defaults: LiveDefaults | None = None) -> PolicyCase | None:
@@ -182,7 +174,6 @@ def _read_case(policy_id: str, product: str, index: int, raw,
     return PolicyCase(policy_id, product, name, test_driver, expected_result,
                       settings, patches, description, live)
 
-
 def _read_live_defaults(raw, where: str, problems: list) -> LiveDefaults:
     """Read a policy's defaults or a live case's partial overrides."""
     where = f'{where} live'
@@ -193,7 +184,6 @@ def _read_live_defaults(raw, where: str, problems: list) -> LiveDefaults:
     write_api = _read_write_api(raw, where, problems) if 'write_api' in raw else None
     scope = _read_enum(Scope, raw, 'scope', where, problems) if 'scope' in raw else None
     return LiveDefaults(write_api, scope)
-
 
 def _resolve_live(raw: dict, driver: TestDriver | None, defaults: LiveDefaults | None,
                   where: str, problems: list) -> LiveConfig | None:
@@ -214,7 +204,6 @@ def _resolve_live(raw: dict, driver: TestDriver | None, defaults: LiveDefaults |
     if not write_api or scope is None:
         return None
     return LiveConfig(write_api, scope)
-
 
 def _read_patches(raw, product: str, where: str, problems: list) -> tuple[Patch, ...]:
     if raw is None:
@@ -246,7 +235,6 @@ def _read_patches(raw, product: str, where: str, problems: list) -> tuple[Patch,
         patches.append(Patch(helper, args))
     return tuple(patches)
 
-
 def _setting_problem(key: object, product: str) -> str | None:
     match = _SETTING_KEY_RE.fullmatch(key) if isinstance(key, str) else None
     if not match:
@@ -259,7 +247,6 @@ def _setting_problem(key: object, product: str) -> str | None:
         return None
     return (f'setting {key!r} is not declared in policy_api.py or named in '
             f'{product.capitalize()}.rego prerequisites; check the spelling')
-
 
 def _read_values(raw: object, field: str, where: str,
                  problems: list) -> dict[str, JsonValue]:
@@ -275,7 +262,6 @@ def _read_values(raw: object, field: str, where: str,
         return {}
     return raw
 
-
 def _read_text(mapping: dict, key: str, where: str, problems: list) -> str:
     value = mapping.get(key, '')
     if not isinstance(value, str):
@@ -283,11 +269,9 @@ def _read_text(mapping: dict, key: str, where: str, problems: list) -> str:
         return ''
     return value
 
-
 def _check_keys(where: str, mapping: dict, allowed: set, problems: list):
     for key in sorted(mapping.keys() - allowed, key=str):
         problems.append(f'{where}: unknown key {key!r} (allowed: {", ".join(sorted(allowed))})')
-
 
 def _read_enum(kind: type[StrEnum], mapping: dict, key: str, where: str, problems: list):
     value = mapping.get(key)
@@ -297,7 +281,6 @@ def _read_enum(kind: type[StrEnum], mapping: dict, key: str, where: str, problem
         choices = ', '.join(member.value for member in kind)
         problems.append(f'{where}: {key} must be one of: {choices} (got {value!r})')
         return None
-
 
 def _read_write_api(entry: dict, where: str, problems: list) -> tuple[WriteApi, ...] | None:
     raw = entry.get('write_api')
