@@ -49,7 +49,7 @@ or [Using a Service Account](../authentication/ServiceAccount.md) for steps):
 - **Enterprise License Manager API** (required for license and subscription data
   in the Common Controls report)
 
-Additionally, because the Groups Settings API does not natively support a read-only API scope, we use the Groups Reader role with Delegated Admin Service Account (DASA) authorization to achieve least privilege and address the risks associated with the update operations available through the Groups Settings API.
+Additionally, we use Delegated Admin Service Account (DASA) authorization for read-only calls to both the Groups Settings API and the Enterprise License Manager API. Because the Groups Settings API does not natively support a read-only API scope, we use the Groups Reader role to achieve least privilege and address the risks associated with its available update operations.
 
 ## Create a Project
 1. If you already have a Google Cloud Project that you want to utilize skip to [Authentication Methods](../authentication/AuthenticationMethods.md)
