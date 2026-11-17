@@ -178,12 +178,10 @@ def add_case(policy_id, **case):
      'settings must be a mapping'),
     (lambda doc: first_case(doc).update(description=[]),
      'description must be text'),
-    (lambda doc: doc['GWS.COMMONCONTROLS.9.1'].update(reason=True),
-     'reason must be text'),
+    (lambda doc: doc['GWS.COMMONCONTROLS.9.1'].update(cases=None),
+     'cases must be a list'),
     (add_case('GWS.COMMONCONTROLS.4.1', name='Session duration of 12 hours is compliant'),
      'duplicate cached case name'),
-    (lambda doc: doc['GWS.COMMONCONTROLS.9.1'].pop('reason'),
-     'add cases, or a reason'),
     (lambda doc: doc['GWS.COMMONCONTROLS.6.2']['live'].update(scope='everywhere'),
      'scope must be one of'),
     (lambda doc: doc['GWS.COMMONCONTROLS.6.2']['live'].update(write_api=['none', 'policy_api']),
@@ -399,25 +397,18 @@ def test_descriptive_names_preserve_punctuation(tmp_path):
     assert plan.cases[0].test_id == f'{plan.policy_id}-cached-{name}'
 
 
-@pytest.mark.parametrize('has_cases,reason,valid', [
-    (True, None, True), (True, 'Partial coverage.', True),
-    (False, None, False), (False, '', False), (False, 'Cases not written yet.', True),
-])
-def test_reason_does_not_control_execution(tmp_path, has_cases, reason, valid):
-    """Reason documents absent or partial coverage; it never disables defined cases."""
+@pytest.mark.parametrize('omit_cases', [False, True])
+def test_policy_can_have_no_cases(tmp_path, omit_cases):
+    """An empty or omitted case list keeps the policy without generating tests."""
     def edit(doc):
         entry = doc['GWS.COMMONCONTROLS.4.1']
-        if not has_cases:
+        if omit_cases:
+            entry.pop('cases')
+        else:
             entry['cases'] = []
-        if reason is not None:
-            entry['reason'] = reason
     path = write_plan(tmp_path, edit)
-    if not valid:
-        with pytest.raises(PlanError, match='add cases, or a reason'):
-            load_plan(path)
-        return
     plan = next(plan for plan in load_plan(path) if plan.policy_id == 'GWS.COMMONCONTROLS.4.1')
-    assert len(plan.cases) == (3 if has_cases else 0)
+    assert plan.cases == ()
 
 
 def test_all_plan_problems_reported_together(tmp_path):

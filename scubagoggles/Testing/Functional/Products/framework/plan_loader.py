@@ -24,7 +24,7 @@ from scubagoggles.Testing.Functional.Products.framework.scuba_app import (
     PACKAGE_DIR, baseline_policy_ids,
 )
 
-_PLAN_KEYS = {'live_testing', 'live', 'cases', 'reason'}
+_PLAN_KEYS = {'live_testing', 'live', 'cases'}
 _CASE_KEYS = {'name', 'test_driver', 'expected_result', 'settings', 'patch', 'description', 'live'}
 _SETTING_KEY_RE = re.compile(r'^([a-z0-9_]+)\.([A-Za-z0-9]+)$')
 _REGO_SETTING_RE = re.compile(r'"policy/([a-z0-9_]+\.[A-Za-z0-9]+)"')
@@ -106,8 +106,7 @@ def _rego_settings(product: str) -> frozenset[str]:
 
 def _read_policy(policy_id: str, product: str, entry, problems: list) -> PolicyPlan | None:
     if not isinstance(entry, dict):
-        problems.append(f'{policy_id}: expected a policy mapping with '
-                        'live_testing and cases/reason')
+        problems.append(f'{policy_id}: expected a policy mapping')
         return None
     _check_keys(policy_id, entry, _PLAN_KEYS, problems)
     live_testing = entry.get('live_testing')
@@ -118,12 +117,8 @@ def _read_policy(policy_id: str, product: str, entry, problems: list) -> PolicyP
                 if 'live' in entry else None)
     if live_testing is False and defaults is not None:
         problems.append(f'{policy_id}: live defaults require live_testing: true')
-    reason = _read_text(entry, 'reason', policy_id, problems)
-
     cases = _read_cases(entry.get('cases', []), policy_id, product, problems,
                        live_defaults=defaults)
-    if not cases and not reason.strip():
-        problems.append(f'{policy_id}: add cases, or a reason explaining why there are none')
 
     if live_testing is None:
         return None
@@ -134,7 +129,7 @@ def _read_policy(policy_id: str, product: str, entry, problems: list) -> PolicyP
             problems.append(f'{case.test_id}: live case requires live_testing: true')
         if case.patches:
             problems.append(f'{case.test_id}: patch helpers only apply to cached cases')
-    return PolicyPlan(policy_id, product, live_testing, tuple(cases), reason, defaults)
+    return PolicyPlan(policy_id, product, live_testing, tuple(cases), live=defaults)
 
 
 def _read_cases(raw, policy_id: str, product: str, problems: list, *,

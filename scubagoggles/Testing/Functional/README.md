@@ -127,8 +127,7 @@ descriptive names; quoting a whole sentence does not make it an exact-name match
 ## Add a test case
 
 1. Open `Products/TestPlans/<product>.yaml` and find the policy's entry.
-2. Add a case under `cases`. Remove a stale `reason` such as "Cases not written
-   yet", or update it if it still explains partial coverage.
+2. Add a case under `cases`, replacing `cases: []` with the populated list.
 3. Run it: `python -m pytest scubagoggles/Testing/Functional/Products -v --export-file="<ScubaResults file>" -k "<policy ID>-"`.
 
 ```yaml
@@ -202,19 +201,24 @@ that an unimplemented policy is reported as such; it doesn't test the policy.
 
 ### Policy fields
 
-Every policy in the product's baseline needs an entry, even without cases. That
-entry is the policy's coverage decision.
+Every policy in the product's baseline needs an entry, even without cases. Each
+entry records its live-testing configuration and any implemented cases.
 
 | Field | Values | Meaning |
 |---|---|---|
 | `live_testing` | `true` or `false` (required boolean) | Whether the team permits live cases for this policy. Use an unquoted YAML boolean, not `allowed`, `denied`, `"true"`, or `"false"`. |
 | `live` | Optional mapping | Shared `write_api` and/or `scope` defaults for live cases. Requires `live_testing: true`. Cached-only policies do not need this block. |
-| `cases` | list | The policy's cases. |
-| `reason` | text | Required when there are no cases, e.g. `Not-Implemented in Rego.` |
+| `cases` | list | The policy's cases. Use `[]` when no cases are implemented. |
 
-`reason` is required when `cases` is omitted or empty. It is optional alongside
-populated `cases`, and never skips those cases. If present, it must be text;
-`reason:` with no value is YAML null and is invalid.
+An empty list creates no tests for that policy. Omitting `cases` also defaults
+to an empty list. If present, it must be a list; use `cases: []` rather than a
+bare `cases:` key, which YAML reads as null.
+
+```yaml
+GWS.COMMONCONTROLS.1.1:
+  live_testing: false
+  cases: []
+```
 
 ### Shared live configuration
 

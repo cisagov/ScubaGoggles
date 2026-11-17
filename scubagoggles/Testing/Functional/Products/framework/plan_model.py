@@ -1,7 +1,7 @@
 """The test plan vocabulary shared by the loader and the runners.
 
 A product's test plan (Products/TestPlans/<product>.yaml) has one PolicyPlan
-per baseline policy: its coverage decision and its PolicyCases.  See
+per baseline policy: its live configuration and its PolicyCases.  See
 Testing/Functional/README.md for the YAML format.
 """
 
@@ -104,11 +104,10 @@ class PolicyCase:
 
 @dataclass(frozen=True)
 class PolicyPlan:
-    """One policy's coverage decision and cases."""
+    """One policy's live configuration and cases."""
 
     policy_id: str
     product: str
     live_testing: bool
     cases: tuple[PolicyCase, ...]
-    reason: str = ''
     live: LiveDefaults | None = None
