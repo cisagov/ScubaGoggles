@@ -1646,7 +1646,7 @@ if {
 
 Takeout := {"blogger": "Blogger",
             "books": "Google Books",
-            "location_history": "Timeline - Location History",
+            "location_history": "Timeline",
             "maps": "Google Maps",
             "pay": "Google Pay",
             "photos": "Google Photos",
