@@ -154,4 +154,31 @@ test_Assuredcontrols2_1_Incorrect_V4 if {
     Output := tests with input as Input
     FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
+
+test_Assuredcontrols2_1_Correct_V2 if {
+    # Gemini enabled is not checked by this policy (see GWS.SI.7.1)
+    PolicyId := AssuredControlsId2_1
+    Input := json.patch(BaseInput, [
+        {
+            "op": "replace",
+            "path": "/assuredcontrols_logs/items/5/events/0/parameters/1/value",
+            "value": "ENABLED"
+        }
+    ])
+    Output := tests with input as Input
+    PassTestResult(PolicyId, Output)
+}
+
+test_Assuredcontrols2_1_Correct_V3 if {
+    # No Gemini event is not a missing event for this policy (see GWS.SI.7.1)
+    PolicyId := AssuredControlsId2_1
+    Input := json.patch(BaseInput, [
+        {
+            "op": "remove",
+            "path": "/assuredcontrols_logs/items/5",
+        },
+    ])
+    Output := tests with input as Input
+    PassTestResult(PolicyId, Output)
+}
 #--
