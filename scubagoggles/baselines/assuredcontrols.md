@@ -114,8 +114,8 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
-    - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591)
-        - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+    - [T1591: Gather Victim Org Information](https://attack.mitre.org/techniques/T1591)
+        - [T1591:001 Gather Victim Org Information: Determine Physical Locations](https://attack.mitre.org/techniques/T1591/001/)
     - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
     - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
