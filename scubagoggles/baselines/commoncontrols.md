@@ -1488,6 +1488,7 @@ Multi-party approval SHOULD be required for role management.
 3.	Click **Save**.
 4.	Click **Multi-party approval for API access to security settings**.
 5.	Ensure **SSO with third-party IDPs** is checked.
+6.  Click **Save**.
 
 #### GWS.COMMONCONTROLS.17.3v1 Instructions
 1.	Click **Multi-party approval for domain admin settings**.
