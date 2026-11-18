@@ -510,9 +510,8 @@ def get_version_args(parser: argparse.ArgumentParser):
                        help=f'{pfx} Upgrade code to new version number')
 
 
-def dive():
-    """Takes in the arguments needed to run scubagoggles
-    """
+def create_parser() -> argparse.ArgumentParser:
+    """Build the command-line parser without parsing arguments or running a command."""
 
     overall_description = """SCuBA Security Baseline Conformance Automation Tool
 
@@ -605,7 +604,13 @@ def dive():
                                          help=help_msg)
     get_version_args(setup_parser)
 
-    scuba_parser = ScubaArgumentParser(parser)
+    return parser
+
+
+def dive():
+    """Parse command-line arguments and run the selected ScubaGoggles command."""
+
+    scuba_parser = ScubaArgumentParser(create_parser())
 
     # When trapping exceptions to suppress tracebacks (which users don't need
     # to see for obvious failures not related to the code), make sure the

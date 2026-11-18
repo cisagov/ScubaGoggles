@@ -3,6 +3,7 @@
 import csv
 import logging
 from datetime import datetime
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -198,13 +199,16 @@ class TestOrchestrator:
         cached = mocker.patch.object(orchestrator, '_run_cached')
         return providers, rego, reporter, cached
 
+    @pytest.mark.parametrize('runcached', [False, True])
     def test_start_automation_raises_error_if_no_credentials_file_provided(
             self,
             orchestrator,
             mocker,
+            runcached,
     ):
         """Raise when credentials are missing and metadata auth is unused."""
         orchestrator._args.credentials = None
+        orchestrator._args.runcached = runcached
         mocker.patch.object(
             orchestrator,
             'notify_user_if_new_release_is_available',
@@ -212,6 +216,23 @@ class TestOrchestrator:
 
         with pytest.raises(UserRuntimeError, match='credentials file path'):
             orchestrator.start_automation()
+
+    @pytest.mark.parametrize('credentials', [None, Path('missing-credentials.json')])
+    def test_start_automation_needs_no_credentials_without_export(
+            self,
+            orchestrator,
+            mocker,
+            credentials,
+    ):
+        """A cached run that skips the export never authenticates."""
+        orchestrator._args.credentials = credentials
+        orchestrator._args.runcached = True
+        orchestrator._args.skipexport = True
+        *_, cached = self._patch_start_automation_dependencies(mocker, orchestrator)
+
+        orchestrator.start_automation()
+
+        cached.assert_called_once()
 
     def test_start_automation_raises_error_if_no_opa_exe_exists(
             self,

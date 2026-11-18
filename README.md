@@ -62,6 +62,12 @@ We use a three-step process:
 
 - [ScubaConnect](https://github.com/cisagov/ScubaConnect) - ScubaConnect is cloud-native infrastructure, developed by CISA, that automates the execution of assessment tools ScubaGear and ScubaGoggles.
 
+### Development and testing
+
+- [Development Guide](docs/development/DEVELOPMENTGUIDE.md)
+- [Functional Tests](scubagoggles/Testing/Functional/README.md) - Run cached policy tests from an existing export or fresh collection, and define YAML test cases.
+- [Smoke Tests](scubagoggles/Testing/Functional/SmokeTests/README.md) - Validate generated HTML reports with Selenium.
+
 ### Misc
 - [Mappings](docs/misc/mappings.md)
 - [OSCAL Catalog](docs/misc/oscal-catalog.md)

@@ -1,9 +1,14 @@
 """
     conftest.py serves as a configuration file for pytest.
+
+    Command-line options for every functional test suite are registered here,
+    because pytest only reads options from conftest files it loads at startup.
+    Fixtures live with the suite that uses them (SmokeTests/, Products/).
 """
 
+from pathlib import Path
+
 import pytest
-from SmokeTests.selenium_browser import Browser
 
 
 def pytest_addoption(parser):
@@ -13,37 +18,36 @@ def pytest_addoption(parser):
         Args:
             parser: An instance of "argparse.ArgumentParser"
     """
-    parser.addoption("--subjectemail", action="store")
+    parser.addoption("--subjectemail", action="store",
+                     help="Delegated user email for service account auth "
+                          "(smoke tests and --collect).")
     parser.addoption("--customerdomain", action="store")
 
+    group = parser.getgroup("product functional tests")
+    group.addoption("--test-driver", choices=("cached", "live"), default="cached",
+                    help="Run the test plan cases with this test_driver (default: cached).")
+    group.addoption("--collect", action="store_true", default=False,
+                    help="Collect one read-only provider export for this session. "
+                         "Cannot be combined with --export-file.")
+    group.addoption("--export-file", type=Path, metavar="JSON_FILE",
+                    help="Replay a ProviderSettingsExport or ScubaResults JSON file. "
+                         "Cannot be combined with --collect.")
+    group.addoption("--credentials", type=Path,
+                    help="Google credentials file for --collect. "
+                         "Defaults to the file saved by `scubagoggles setup`.")
+    group.addoption("--customerid", help="Google customer ID for --collect.")
+    group.addoption("--opapath", type=Path,
+                    help="Directory containing the OPA executable. "
+                         "Defaults to the directory saved by `scubagoggles setup`.")
 
-@pytest.fixture
-def subjectemail(pytestconfig):
+
+def pytest_configure(config):
     """
-        Setup code that shares the "subjectemail" parameter across tests.
-
-        Args:
-            pytestconfig: Provides access to the "Config" object for a current test session
+        Reject option combinations the product tests cannot run with.
     """
-    return pytestconfig.getoption("subjectemail")
-
-
-@pytest.fixture
-def customerdomain(pytestconfig):
-    """
-        Setup code that shares the "customerdomain" parameter across tests.
-
-        Args:
-            pytestconfig: Provides access to the "Config" object for a current test session
-    """
-    return pytestconfig.getoption("customerdomain")
-
-
-@pytest.fixture
-def browser():
-    """
-        Setup code that shares a Selenium WebDriver instance across tests.
-    """
-    browser_instance = Browser()
-    yield browser_instance
-    browser_instance.quit()
+    if config.getoption("--collect") and config.getoption("--export-file") is not None:
+        raise pytest.UsageError("Choose --collect or --export-file, not both.")
+    if config.getoption("--collect") and getattr(config.option, "numprocesses", None):
+        raise pytest.UsageError("Fresh collection runs serially; omit pytest-xdist -n.")
+    if config.getoption("--test-driver") == "live":
+        raise pytest.UsageError("The live test driver is not implemented yet.")

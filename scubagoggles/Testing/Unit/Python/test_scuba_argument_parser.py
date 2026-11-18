@@ -82,7 +82,7 @@ class FakeParser:
         self.parse_args_calls = 0
         self._actions: list[argparse.Action] = []
 
-    def parse_args(self) -> argparse.Namespace:
+    def parse_args(self, _args=None) -> argparse.Namespace:
         """Return the stored namespace and count how many times it was used."""
         self.parse_args_calls += 1
         return self.parsed_args
@@ -163,7 +163,7 @@ class TestScubaArgumentParser:
         monkeypatch.setattr(
             ScubaArgumentParser,
             "_get_explicit_cli_args",
-            classmethod(lambda _cls, _args: {"baselines", "credentials"}),
+            classmethod(lambda _cls, _args, _argv=None: {"baselines", "credentials"}),
         )
         monkeypatch.setattr(ScubaArgumentParser, "validate_omissions", lambda *_: None)
         monkeypatch.setattr(ScubaArgumentParser, "validate_annotations", lambda *_: None)
@@ -193,7 +193,7 @@ class TestScubaArgumentParser:
                 """Record every added argument."""
                 self.added_arguments.append((dests, kwargs))
 
-            def parse_known_args(self) -> tuple[argparse.Namespace, list[str]]:
+            def parse_known_args(self, _argv=None) -> tuple[argparse.Namespace, list[str]]:
                 """Return a namespace that marks a couple of arguments as explicit."""
                 return argparse.Namespace(baselines="from-cli", verbose=False), []
 
@@ -395,6 +395,28 @@ class TestScubaArgumentParser:
             ['scubagoggles', 'gws', '--config', str(config_file)],
         )
         return self._parser(tmp_path).parse_args_with_config()
+
+    @pytest.mark.parametrize('baseline_option', ['--baselines', '-b'])
+    def test_explicit_argv_controls_config_precedence(self, tmp_path,
+                                                     monkeypatch, baseline_option):
+        """Supplied arguments override config without consulting process arguments."""
+        config_file = self._write_config(tmp_path, {
+            'baselines': ['chat'],
+            'quiet': False,
+            'subjectemail': 'config@example.gov',
+        })
+        monkeypatch.setattr(sys, 'argv', [
+            'pytest', '--subjectemail', 'process@example.gov',
+        ])
+
+        args = self._parser(tmp_path).parse_args_with_config([
+            'gws', '--config', str(config_file),
+            baseline_option, 'calendar', '--quiet',
+        ])
+
+        assert args.baselines == ['calendar']
+        assert args.quiet is True
+        assert args.subjectemail == 'config@example.gov'
 
     def test_all_valid_gws_argument_forms_are_loaded(self, tmp_path,
                                                      monkeypatch):
