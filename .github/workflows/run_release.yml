@@ -79,14 +79,16 @@ jobs:
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
 
-          FOUNDLINUX=$(find /home/runner/scubagoggles/sample-report -type d -name "ScubaResults_*")
+          ls -al
+
+          FOUNDLINUX=$(find ./scubagoggles/sample-report -type d -name "ScubaResults_*")
           echo $FOUNDLINUX
           echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
 
           genson --schema $FOUNDLINUX
           datacontract import json --source $FOUNDLINUX --schema NULL --output scubagoggles_sample_report_datacontract.yaml
 
-          FOUNDATACONTRACT=$(find /home/runner -type d -name "scubagoggles_sample_report_datacontract*")
+          FOUNDATACONTRACT=$(find ./ -type d -name "scubagoggles_sample_report_datacontract*")
           echo $FOUNDATACONTRACT
           echo "cachepath=$FOUNDATACONTRACT" >> $GITHUB_OUTPUT
 
