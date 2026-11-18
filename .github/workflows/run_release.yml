@@ -86,9 +86,11 @@ jobs:
           echo "cachepath=$FOUNDJSON" >> $GITHUB_OUTPUT
 
           genson -s $FOUNDJSON
-          datacontract import json --source $FOUNDJSON --schema NULL --output scubagoggles_sample_report_datacontract.yaml
+          datacontract import json --source $FOUNDJSON --json-schema NULL --output scubagoggles_sample_report_datacontract.yaml
 
-          FOUNDATACONTRACT=$(find ./ -type d -name "scubagoggles_sample_report_datacontract*")
+          ls -al
+
+          FOUNDATACONTRACT=$(find ./ -type f -name "scubagoggles_sample_report_datacontract.yaml")
           echo $FOUNDATACONTRACT
           echo "cachepath=$FOUNDATACONTRACT" >> $GITHUB_OUTPUT
 
