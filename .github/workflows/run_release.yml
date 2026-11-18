@@ -81,12 +81,13 @@ jobs:
 
           ls -al
 
-          FOUNDLINUX=$(find ./scubagoggles/sample-report -type d -name "ScubaResults_*")
-          echo $FOUNDLINUX
-          echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
+          FOUNDJSON=$(find ./scubagoggles/sample-report -type d -name "ScubaResults_*")
+          echo ./scubagoggles/sample-report/
+          echo $FOUNDJSON
+          echo "cachepath=$FOUNDJSON" >> $GITHUB_OUTPUT
 
-          genson --schema $FOUNDLINUX
-          datacontract import json --source $FOUNDLINUX --schema NULL --output scubagoggles_sample_report_datacontract.yaml
+          genson --schema $FOUNDJSON
+          datacontract import json --source $FOUNDJSON --schema NULL --output scubagoggles_sample_report_datacontract.yaml
 
           FOUNDATACONTRACT=$(find ./ -type d -name "scubagoggles_sample_report_datacontract*")
           echo $FOUNDATACONTRACT
