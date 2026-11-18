@@ -63,7 +63,7 @@ Gemini app user access SHALL be set to OFF for everyone without a license.
 protected from use in generative AI training by the Google Workspace Terms of Service. Data for users without the
 appropriate license can be used to improve Google's generative AI models.
 Allowing user access to Gemini under any license creates the risk of data leakage but restricting it to licensed users will grant protection by the GWS Terms of Service.
-- _Last modified:_ July 2025
+- _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -109,7 +109,7 @@ have not yet been fully vetted and may still need to undergo robust testing to v
 compliance with applicable security standards. Additionally, government customers are
 prohibited from using production data with pre-general availability offerings, per the Google Workspace
 Service Specific Terms.
-- _Last modified:_ August 2026
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
