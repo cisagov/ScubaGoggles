@@ -1476,22 +1476,22 @@ Multi-party approval SHOULD be required for role management.
 #### GWS.COMMONCONTROLS.17.2v1 Instructions
 1.	Click **Multi-party approval for security settings**.
 2.	Ensure the following are all checked:
-  - **2-step verification**
-  - **Account recovery**
-  - **Google Session Control**
-  - **Advanced Protection Program**
-  - **Login challenges**
-  - **Passwordless**
-  - **Domain-wide delegation**
-  - **SSO with third-party IDPs**
-  - **Context-Aware Access**
+    - **2-step verification**
+    - **Account recovery**
+    - **Google Session Control**
+    - **Advanced Protection Program**
+    - **Login challenges**
+    - **Passwordless**
+    - **Domain-wide delegation**
+    - **SSO with third-party IDPs**
+    - **Context-Aware Access**
 3.	Click **Save**.
 4.	Click **Multi-party approval for API access to security settings**.
 5.	Ensure **SSO with third-party IDPs** is checked.
 
 #### GWS.COMMONCONTROLS.17.3v1 Instructions
 1.	Click **Multi-party approval for domain admin settings**.
-2.	Ensure the **Domains API** is checked.
+2.	Ensure **Domains API** is checked.
 3.  Click **Save**.
 
 #### GWS.COMMONCONTROLS.17.4v1 Instructions
