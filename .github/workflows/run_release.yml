@@ -58,6 +58,12 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Install ODCS dependencies
+        run: |
+
+          pip install genson
+          uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
+
       - name: Package Repo for release
         shell: bash
         run: |
@@ -69,6 +75,19 @@ jobs:
           [[ "$reqv" == "$sgv" ]] \
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
+
+          FOUNDLINUX=$(find /home/runner/scubagoggles/sample-report -type d -name "ScubaResults_*")
+          echo $FOUNDLINUX
+          echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
+
+          genson --schema $FOUNDLINUX
+          datacontract import json --source $FOUNDLINUX --schema NULL --output scubagoggles_sample_report_datacontract.yaml
+
+          FOUNDATACONTRACT=$(find /home/runner -type d -name "scubagoggles_sample_report_datacontract*")
+          echo $FOUNDATACONTRACT
+          echo "cachepath=$FOUNDATACONTRACT" >> $GITHUB_OUTPUT
+
+          datacontract test $FOUNDATACONTRACT
       - name: Generate OSCAL baseline catalog artifact
         shell: bash
         run: |
