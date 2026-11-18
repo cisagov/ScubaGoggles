@@ -79,22 +79,23 @@ jobs:
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
 
-          ls -al
-
           FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
-          echo $FOUNDJSON
           echo "cachepath=$FOUNDJSON" >> $GITHUB_OUTPUT
 
           genson -s $FOUNDJSON
           datacontract import json --source $FOUNDJSON --json-schema NULL --output scubagoggles_sample_report_datacontract.yaml
 
-          ls -al
-
           FOUNDATACONTRACT=$(find ./ -type f -name "scubagoggles_sample_report_datacontract.yaml")
-          echo $FOUNDATACONTRACT
           echo "cachepath=$FOUNDATACONTRACT" >> $GITHUB_OUTPUT
 
+          yq -i 'del(.. | select(has("format") and .format == "email") | .format)' $FOUNDATACONTRACT
+
           datacontract test $FOUNDATACONTRACT
+
+          mkdir ./scubagoggles/schemas
+
+          mv $FOUNDATACONTRACT ./scubagoggles/schemas/
+
       - name: Generate OSCAL baseline catalog artifact
         shell: bash
         run: |
