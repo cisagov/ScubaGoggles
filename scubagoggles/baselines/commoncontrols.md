@@ -1463,13 +1463,44 @@ Multi-party approval SHOULD be required for role management.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.17.1v1 Instructions
-To configure additional services per the policy:
+#### Policy Group 17 Common Instructions
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Security**.
-3.	Click the **Multi-party approval settings** card.
-4.	Ensure **Require multi party approval for sensitive admin actions** is checked.
-5.	Click **Save**.
+2.	Navigate to **Security** -\> **Authentication**.
+3.  Select **Multi-party approval settings**.
+
+#### GWS.COMMONCONTROLS.17.1v1 Instructions
+1.	Click **Multi-party approval settings**.
+2.	Ensure **Require multi party approval for sensitive admin actions** is checked.
+3.	Click **Save**.
+
+#### GWS.COMMONCONTROLS.17.2v1 Instructions
+1.	Click **Multi-party approval for security settings**.
+2.	Ensure the following are all checked:
+  - **2-step verification**
+  - **Account recovery**
+  - **Google Session Control**
+  - **Advanced Protection Program**
+  - **Login challenges**
+  - **Passwordless**
+  - **Domain-wide delegation**
+  - **SSO with third-party IDPs**
+  - **Context-Aware Access**
+3.	Click **Save**.
+4.	Click **Multi-party approval for API access to security settings**.
+5.	Ensure **SSO with third-party IDPs** is checked.
+
+#### GWS.COMMONCONTROLS.17.3v1 Instructions
+1.	Click **Multi-party approval for domain admin settings**.
+2.	Ensure the **Domains API** is checked.
+3.  Click **Save**.
+
+#### GWS.COMMONCONTROLS.17.4v1 Instructions
+1.	Click **Multi-party approval for role management (Admin Console)**.
+2.	Ensure **Role assignment and update role privilege in Admin Console UI** is checked.
+3.  Click **Save**.
+4.	Click **Multi-party approval for role management (API)**.
+5.	Ensure **Role assignment and update role privilege in API** is checked.
+6.  Click **Save**.
 
 ## 18. Data Loss Prevention
 
