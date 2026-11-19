@@ -63,6 +63,21 @@ NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
 )
 
+# Former baseline short names that are still accepted in place of the current
+# baseline short names (e.g., "gemini" for the Super Intelligence (SI)
+# baseline).
+BASELINE_ALIASES = {
+    'gemini': 'si'
+}
+
+# Former policy ID prefixes and the current prefixes that replaced them when
+# policies moved to another baseline (e.g., GWS.GEMINI.1.1v1 is now
+# GWS.SI.1.1v1, and GWS.MEET.6.1v1 is now GWS.SI.6.1v1).
+POLICY_ID_ALIASES = {
+    'GWS.GEMINI.': 'GWS.SI.',
+    'GWS.MEET.6.': 'GWS.SI.6.'
+}
+
 class AuthFlow(Flag):
     """Indicates which authentication flow(s) a scope applies to.
 

@@ -128,7 +128,7 @@ GET_GWS_LOGS_CASES = [
     },
     # Gemini Beta features use APPLICATION_NAME "Gemini in Workspace"
     {
-        "products": ["gemini", "gmail"],
+        "products": ["si", "gmail"],
         "event": "CHANGE_APPLICATION_SETTING",
         "reports": [
             {
@@ -194,7 +194,7 @@ GET_GWS_LOGS_CASES = [
                     ],
                 },
             ],
-            "gemini": [
+            "si": [
                 {
                     "id": "gemini-beta",
                     "events": [
@@ -230,6 +230,112 @@ GET_GWS_LOGS_CASES = [
                                     "name": "APPLICATION_NAME",
                                     "value": "Drive and Editors GenAI",
                                 },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        "expect_warning": False,
+    },
+    # Google Meet Gemini settings use APPLICATION_NAME "Google Meet GenAI",
+    # which belongs to the SI baseline rather than Meet
+    {
+        "products": ["si", "meet"],
+        "event": "CHANGE_APPLICATION_SETTING",
+        "reports": [
+            {
+                "id": "meet-genai",
+                "events": [
+                    {
+                        "parameters": [
+                            {
+                                "name": "APPLICATION_NAME",
+                                "value": "Google Meet GenAI",
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "meet",
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "APPLICATION_NAME", "value": "Google Meet"},
+                        ]
+                    }
+                ]
+            },
+        ],
+        "expected": {
+            "si": [
+                {
+                    "id": "meet-genai",
+                    "events": [
+                        {
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Google Meet GenAI",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+            "meet": [
+                {
+                    "id": "meet",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Google Meet"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        "expect_warning": False,
+    },
+    # Data regions settings apply to both Assured Controls and the Gemini
+    # settings in the SI baseline, so each product receives the event
+    {
+        "products": ["assuredcontrols", "si"],
+        "event": "CHANGE_APPLICATION_SETTING",
+        "reports": [
+            {
+                "id": "data-regions",
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "APPLICATION_NAME", "value": "Data regions"},
+                        ]
+                    }
+                ]
+            },
+        ],
+        "expected": {
+            "assuredcontrols": [
+                {
+                    "id": "data-regions",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Data regions"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+            "si": [
+                {
+                    "id": "data-regions",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Data regions"},
                             ],
                         },
                     ],

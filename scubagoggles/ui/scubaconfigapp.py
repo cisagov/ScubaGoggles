@@ -20,7 +20,9 @@ import streamlit as st
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
+from scubagoggles.scuba_constants import BASELINE_ALIASES
 from scubagoggles.ui.validation import ConfigValidator
+from scubagoggles.utils import replace_former_policy_ids
 
 
 class _IndentedListDumper(yaml.SafeDumper):
@@ -428,9 +430,11 @@ class ScubaConfigApp:
         if not baseline_dir.exists():
             return {}
 
+        # Only the known baselines are parsed, so the other Markdown files in
+        # the directory (e.g., README.md and removedpolicies.md) are skipped.
         products = [
             f.stem for f in baseline_dir.glob('*.md')
-            if f.name != 'README.md'
+            if f.stem in ScubaConfigApp._BASELINE_INFO
         ]
         if not products:
             return {}
@@ -655,6 +659,11 @@ class ScubaConfigApp:
         elif not isinstance(baselines, list):
             baselines = []
 
+        # Replace any baseline aliases (e.g., "gemini") with the current
+        # baseline names (e.g., "si"), removing any duplicates.
+        baselines = list(dict.fromkeys(BASELINE_ALIASES.get(b, b)
+                                       for b in baselines))
+
         baseline_info = self.get_baseline_info()
         valid = [b for b in baselines if b in baseline_info]
         invalid = [b for b in baselines if b not in baseline_info]
@@ -720,7 +729,11 @@ class ScubaConfigApp:
 
         for key in ('omitpolicy', 'annotatepolicy'):
             if key in config and isinstance(config[key], dict):
-                data[key] = config[key]
+                data[key], replaced = replace_former_policy_ids(config[key])
+                if replaced:
+                    updated = ', '.join(f'{former} → {current}'
+                                        for former, current in replaced.items())
+                    st.warning(f"⚠️ **Updated former policy IDs in {key}:** {updated}")
 
         for key, coerce in (
             ('breakglassaccounts', None),
@@ -1373,9 +1386,9 @@ class ScubaConfigApp:
             'title': 'Classroom',
             'description': 'Educational platform security and privacy controls',
         },
-        'gemini': {
+        'si': {
             'icon': '🤖',
-            'title': 'Gemini',
+            'title': 'Super Intelligence (SI)',
             'description': 'AI-powered features and data processing controls',
         },
     }

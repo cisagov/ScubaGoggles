@@ -101,17 +101,19 @@ Agencies SHOULD restrict support access to U.S.-based Google staff only.
 ## 2. Data Regions Advanced Settings
 Data regions advanced settings can be used to restrict access to features that process data globally.
 However, these settings only apply to users with the Assured Controls Plus add-on.
+The data regions setting for Gemini is covered by the Super Intelligence (SI) baseline. See
+[Gemini Data Regions](si.md#7-gemini-data-regions).
 
 ### Policies
 
-#### GWS.ASSUREDCONTROLS.2.1v1
-Data processing across multiple regions SHOULD be disabled for all Google Workspace products.
+#### GWS.ASSUREDCONTROLS.2.1v2
+Data processing across multiple regions SHOULD be disabled for all Google Workspace products other than Gemini.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 -  _Rationale:_ This policy prevents data processing in a region other than the United States, reducing potential exposure to unauthorized entities. Implementation of this policy helps prevent agency data from being subject to the laws of other nations.
-- _Last modified:_ November 2025
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
     - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591)
@@ -127,7 +129,7 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 
 ### Implementation
 
-#### GWS.ASSUREDCONTROLS.2.1v1 Instructions
+#### GWS.ASSUREDCONTROLS.2.1v2 Instructions
 1. Sign in to the [Google Admin Console](https://admin.google.com/) as an administrator.
 2. Navigate to **Data** -\> **Compliance** -\> **Data Regions** -\> **Advanced Settings**.
 3. Select **Calendar** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
@@ -135,4 +137,3 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 5. Select **Gmail** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
 6. Select **Google Chat and classic Hangouts**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.
 7. Select **Google Meet** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-8. Select **Gemini app and Gemini in Google Workspace apps**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.
