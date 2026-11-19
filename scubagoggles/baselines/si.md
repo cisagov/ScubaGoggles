@@ -17,6 +17,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Gemini Omni](#5-gemini-omni)
 -   [Google Meet Gemini Settings](#6-google-meet-gemini-settings)
 -   [Gemini Data Regions](#7-gemini-data-regions)
+-   [Gemini Notebook Sharing](#8-gemini-notebook-sharing)
 
 ## Assumptions
 
@@ -376,3 +377,67 @@ Data processing across multiple regions SHOULD be disabled for the Gemini app an
 1. Sign in to the [Google Admin Console](https://admin.google.com/) as an administrator.
 2. Navigate to **Data** -\> **Compliance** -\> **Data Regions** -\> **Advanced Settings**.
 3. Select **Gemini app and Gemini in Google Workspace apps**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.
+
+## 8. Gemini Notebook Sharing
+Gemini Notebook lets users build notebooks from uploaded sources and share
+those notebooks with other people. By default, users can't share notebooks with
+anyone outside the organization. Admins can allow external sharing with
+allowlisted domains or with any external email address. When external sharing
+is set to **On**, admins can also enable public sharing, which makes notebooks
+available to anyone with the link. This section covers external and public
+sharing of Gemini Notebooks.
+
+### Policies
+
+#### GWS.SI.8.1v1
+External sharing for Gemini Notebook SHALL be set to Off or restricted to allowlisted domains.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwssi81v1-instructions)
+
+- _Rationale:_ Notebooks may contain sensitive information, either in uploaded sources or in AI-generated output such as summaries and audio overviews. Restricting external sharing to allowlisted domains, or disabling it, reduces the risk of inadvertent data leakage outside the organization.
+- _Last modified:_ November 2026
+- _Note:_
+  - This policy restricts information sharing
+  - This policy prevents data leakage outside of the organization
+  - If specific users have a need for broader external sharing, external sharing MAY be enabled for specific Organizational Units (OUs).
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
+
+#### GWS.SI.8.2v1
+Public notebook sharing SHALL NOT be enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwssi82v1-instructions)
+
+- _Rationale:_ Public sharing makes a notebook available to anyone with the link, without requiring the viewer to be named or signed in to an account in an allowlisted domain. This removes oversight and accountability for who can access the notebook's sources and AI-generated content. Disabling public sharing ensures that every notebook recipient is explicitly named.
+- _Last modified:_ November 2026
+- _Note:_ Public sharing can only be enabled when external sharing is set to **On**. Organizations compliant with GWS.SI.8.1v1 are therefore compliant with this policy for the same OUs.
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, IA-8
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
+
+### Resources
+- [GWS Admin Help \| Manage Gemini Notebook sharing settings](https://knowledge.workspace.google.com/admin/generative-ai/gemini-notebook/manage-gemini-notebook-sharing-settings)
+- [Google Workspace Updates \| Manage external sharing for Gemini Notebook in the Admin console](https://workspaceupdates.googleblog.com/2026/09/manage-external-sharing-for-gemini-notebook-in-the-Admin-console.html)
+
+### Prerequisites
+- The Gemini Settings administrator privilege is required to view or change these settings.
+
+### Implementation
+
+#### GWS.SI.8.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini Notebook**.
+3.  Under **Sharing outside of** _your organization_, select **Off** or **Allowlisted domains**.
+4.  If **Allowlisted domains** is selected, select **Edit** and ensure only approved domains are listed.
+5.  Select **Save**.
+
+#### GWS.SI.8.2v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini Notebook**.
+3.  If **Sharing outside of** _your organization_ is set to **On**, ensure **Public Sharing** is **Unchecked**.
+4.  Select **Save**.

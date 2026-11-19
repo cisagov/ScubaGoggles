@@ -540,3 +540,45 @@ if {
     Status := (false in Conditions) == false
 }
 #--
+
+##########
+# GWS.SI.8 #
+##########
+
+# Gemini Notebook sharing settings are not returned by the Policy API and do not
+# appear in the admin audit logs as of November 2026, so both policies are
+# manual checks until Google exposes them.
+
+#
+# Baseline GWS.SI.8.1
+#--
+
+SIId8_1 := utils.PolicyIdWithSuffix("GWS.SI.8.1")
+
+tests contains {
+    "PolicyId": SIId8_1,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.SI.8.2
+#--
+
+SIId8_2 := utils.PolicyIdWithSuffix("GWS.SI.8.2")
+
+tests contains {
+    "PolicyId": SIId8_2,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
