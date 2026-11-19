@@ -176,6 +176,34 @@ pip install -r requirements.txt
 
 pip install -e .
 
+pip install uv
+
+pip install genson
+
+ls -al
+
+FOUNDJSON=$(find ./scubagoggles-*/sample-report -type f -name "ScubaResults_*.json")
+echo "$FOUNDJSON"
+
+genson -s $FOUNDJSON
+datacontract import json --source $FOUNDJSON --json-schema NULL --output scubagoggles_sample_report_datacontract.yaml
+
+FOUNDATACONTRACT=$(find ./ -type f -name "scubagoggles_sample_report_datacontract.yaml")
+echo "$FOUNDATACONTRACT"
+
+yq -i 'del(.. | select(has("format") and .format == "email") | .format)' $FOUNDATACONTRACT
+
+datacontract test $FOUNDATACONTRACT
+
+mkdir schemas
+
+ls -al
+
+mv $FOUNDATACONTRACT ./schemas/
+mv ./schemas ./scubagoggles-*/
+
+ls -al
+
 echo "$buildPfx Build distribution files..."
 
 python -m build
