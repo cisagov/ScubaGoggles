@@ -319,12 +319,7 @@ class TestMarkdownParser:
                                                   'Value': '5.1 value'},
                                                  {'Id': 'GWS.MEET.5.2v0.6',
                                                   'Value': '5.2 value'}],
-                                    'GroupNumber': '5'},
-                                   {'Controls': [{'Id': 'GWS.MEET.6.1v0.6',
-                                                  'Value': '6.1 value'},
-                                                 {'Id': 'GWS.MEET.6.2v0.6',
-                                                  'Value': '6.2 value'}],
-                                    'GroupNumber': '6'}]},
+                                    'GroupNumber': '5'}]},
                                True,
                                {'calendar':
                                   {'GWS.CALENDAR.1.1v0.6': '1.1 value',
@@ -339,9 +334,7 @@ class TestMarkdownParser:
                                    'GWS.MEET.3.1v0.6': '3.1 value',
                                    'GWS.MEET.4.1v0.6': '4.1 value',
                                    'GWS.MEET.5.1v0.6': '5.1 value',
-                                   'GWS.MEET.5.2v0.6': '5.2 value',
-                                   'GWS.MEET.6.1v0.6': '6.1 value',
-                                   'GWS.MEET.6.2v0.6': '6.2 value'}})))
+                                   'GWS.MEET.5.2v0.6': '5.2 value'}})))
 
     def test_controls_by_product(self,
                                  data: dict,

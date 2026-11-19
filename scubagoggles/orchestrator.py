@@ -105,7 +105,7 @@ class Orchestrator:
         'commoncontrols',
         'assuredcontrols',
         'classroom',
-        'gemini'
+        'si'
     ]
     _prod_to_fullname = {
         'gmail': 'Gmail',
@@ -118,7 +118,7 @@ class Orchestrator:
         'commoncontrols': 'Common Controls',
         'assuredcontrols': 'Assured Controls',
         'classroom': 'Google Classroom',
-        'gemini': 'Gemini'
+        'si': 'Super Intelligence'
     }
 
     _gws = {
