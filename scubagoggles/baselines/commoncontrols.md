@@ -1402,12 +1402,12 @@ Require multi-party approval for sensitive admin actions SHOULD be enabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification (2SV), could introduce serious vulnerabilities to the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates this risk.
-- _Last modified:_ August 2025
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
-  - [TT1136: Create Account](https://attack.mitre.org/techniques/T1136/)
-    - [TT1136:003 Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
+  - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
+    - [T1136:003 Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
   - [T1484: Domain or Tenant Policy Modification](https://attack.mitre.org/techniques/T1484/)
     - [T1484:002 Trust Modification](https://attack.mitre.org/techniques/T1484/002/)
   - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
