@@ -176,9 +176,9 @@ pip install -r requirements.txt
 
 pip install -e .
 
-pip install uv
-
 pip install genson
+
+uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
 
 ls -al
 
