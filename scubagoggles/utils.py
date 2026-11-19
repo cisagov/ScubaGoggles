@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 from importlib.metadata import version, PackageNotFoundError
 
+from scubagoggles.scuba_constants import POLICY_ID_ALIASES
+
 
 def create_subset_inverted_dict(dictionary: dict, keys: list) -> dict:
     """
@@ -137,3 +139,39 @@ def strtobool(value: str) -> bool:
         return False
 
     raise ValueError(f'strtobool("{value}"): invalid truth value')
+
+
+def replace_former_policy_ids(policies: dict) -> tuple[dict, dict]:
+
+    """Replace any former policy IDs (e.g., 'GWS.GEMINI.1.1v1') used as keys
+    in the given dictionary with the current policy IDs (e.g.,
+    'GWS.SI.1.1v1').  If both the former and the current ID of a policy are
+    present, the entry for the current ID is kept.
+
+    :param dict policies: policy omissions or annotations keyed by policy ID.
+
+    :return: a tuple of the dictionary keyed by the current policy IDs, and a
+        dictionary mapping each former policy ID found to its current ID.
+    """
+
+    keys = {key.lower() for key in policies if isinstance(key, str)}
+
+    resolved = {}
+    replaced = {}
+
+    for policy_id, value in policies.items():
+        current_id = policy_id
+        if isinstance(policy_id, str):
+            for former, current in POLICY_ID_ALIASES.items():
+                if policy_id.upper().startswith(former):
+                    current_id = current + policy_id[len(former):]
+                    break
+
+        if current_id != policy_id:
+            replaced[policy_id] = current_id
+            if current_id.lower() in keys:
+                continue
+
+        resolved[current_id] = value
+
+    return resolved, replaced

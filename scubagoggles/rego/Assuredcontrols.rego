@@ -90,6 +90,8 @@ if {
 # Baseline GWS.ASSUREDCONTROLS.2.1
 #--
 
+# The Gemini data regions setting is checked by GWS.SI.7.1 in Si.rego.
+
 AssuredControlsId2_1 := utils.PolicyIdWithSuffix("GWS.ASSUREDCONTROLS.2.1")
 
 MultiRegionsSettings := [
@@ -97,8 +99,7 @@ MultiRegionsSettings := [
     "DocsNonRegionalizedFunctionalityStateSettingsProto state",
     "GmailNonRegionalizedFunctionalityStateSettingsProto state",
     "ChatNonRegionalizedFunctionalityStateSettingsProto state",
-    "MeetNonRegionalizedFunctionalityStateSettingsProto state",
-    "GeminiNonRegionalizedFunctionalityStateSettingsProto state"
+    "MeetNonRegionalizedFunctionalityStateSettingsProto state"
 ]
 
 AppDisplayName(Setting) := "Calendar" if {
@@ -111,8 +112,6 @@ AppDisplayName(Setting) := "Calendar" if {
     Setting == "ChatNonRegionalizedFunctionalityStateSettingsProto"
 } else := "Google Meet" if {
     Setting == "MeetNonRegionalizedFunctionalityStateSettingsProto"
-} else := "Gemini app and Gemini in Google Workspace apps" if {
-    Setting == "GeminiNonRegionalizedFunctionalityStateSettingsProto"
 } else := split(Setting, "NonRegionalizedFunctionalityStateSettingsProto")[0]
 
 AppsWithMultiRegionEnabledbyOU contains {

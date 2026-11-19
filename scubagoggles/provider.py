@@ -56,7 +56,7 @@ class _PaginatedListResource(Protocol):
 # pylint: disable=too-many-instance-attributes
 
 EVENTS = {
-    'gemini': [
+    'si': [
         'CHANGE_APPLICATION_SETTING',
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
@@ -1011,14 +1011,16 @@ class Provider:
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
-            'gemini': [
+            'si': [
                 'Gemini app',
                 'Gemini in Workspace',
                 'Gemini in Workspace apps',
-                'Drive and Editors GenAI'
+                'Drive and Editors GenAI',
+                'Google Meet GenAI',
+                'Data regions'
             ],
             'groups': ['Groups for Business'],
-            'meet': ['Google Meet', 'Google Meet GenAI'],
+            'meet': ['Google Meet'],
             'sites': ['Sites'],
             'classroom': ['Classroom']
         }

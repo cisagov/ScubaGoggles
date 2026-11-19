@@ -1,16 +1,16 @@
-package gemini
+package si
 import future.keywords
 
 import data.utils.FailTestGroupNonCompliant
 import data.utils.FailTestOUNonCompliant
 
 #
-# GWS.GEMINI.1.1
+# GWS.SI.1.1
 #--
 test_1_1_Correct_V1 if {
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -44,9 +44,9 @@ test_1_1_Correct_V1 if {
 
 test_1_1_Correct_V2 if {
     # Any license allowed but Gemini disabled for OU
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -80,9 +80,9 @@ test_1_1_Correct_V2 if {
 
 test_1_1_Correct_V3 if {
     # Any inheritance
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2020-12-20T00:02:28.672Z"},
                 "events": [{
@@ -143,9 +143,9 @@ test_1_1_Correct_V3 if {
 
 test_1_1_Incorrect_V1 if {
     # Any license allowed
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -178,9 +178,9 @@ test_1_1_Incorrect_V1 if {
 
 test_1_1_Incorrect_V2 if {
     # Any license allowed in group
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
