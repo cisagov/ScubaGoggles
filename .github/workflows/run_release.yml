@@ -92,9 +92,14 @@ jobs:
 
           datacontract test $FOUNDATACONTRACT
 
-          mkdir ./scubagoggles/schemas
+          mkdir schemas
 
-          mv $FOUNDATACONTRACT ./scubagoggles/schemas/
+          ls -al
+
+          mv $FOUNDATACONTRACT ./schemas/
+          mv ./schemas ./scubagoggles/
+
+          ls -al
 
       - name: Generate OSCAL baseline catalog artifact
         shell: bash
