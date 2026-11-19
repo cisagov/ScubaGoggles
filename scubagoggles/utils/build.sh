@@ -182,7 +182,7 @@ uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
 
 ls -al
 
-FOUNDJSON=$(find ./scubagoggles-*/sample-report -type f -name "ScubaResults_*.json")
+FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
 echo "$FOUNDJSON"
 
 genson -s $FOUNDJSON
@@ -200,7 +200,7 @@ mkdir schemas
 ls -al
 
 mv $FOUNDATACONTRACT ./schemas/
-mv ./schemas ./scubagoggles-*/
+mv ./schemas ./scubagoggles/
 
 ls -al
 
