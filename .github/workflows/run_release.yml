@@ -58,15 +58,6 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
-
-      - name: Install ODCS dependencies
-        run: |
-
-          pip install genson
-          uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
-
       - name: Package Repo for release
         shell: bash
         run: |
@@ -78,29 +69,6 @@ jobs:
           [[ "$reqv" == "$sgv" ]] \
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
-
-          FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
-          echo "cachepath=$FOUNDJSON" >> $GITHUB_OUTPUT
-
-          genson -s $FOUNDJSON
-          datacontract import json --source $FOUNDJSON --json-schema NULL --output scubagoggles_sample_report_datacontract.yaml
-
-          FOUNDATACONTRACT=$(find ./ -type f -name "scubagoggles_sample_report_datacontract.yaml")
-          echo "cachepath=$FOUNDATACONTRACT" >> $GITHUB_OUTPUT
-
-          yq -i 'del(.. | select(has("format") and .format == "email") | .format)' $FOUNDATACONTRACT
-
-          datacontract test $FOUNDATACONTRACT
-
-          mkdir schemas
-
-          ls -al
-
-          mv $FOUNDATACONTRACT ./schemas/
-          mv ./schemas ./scubagoggles/
-
-          ls -al
-
       - name: Generate OSCAL baseline catalog artifact
         shell: bash
         run: |
