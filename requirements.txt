@@ -3,7 +3,6 @@
 build
 pytest>=9
 pytest-mock
-uv
 
 # There are many Python versions for users to install for ScubaGoggles, and
 # because of this, it is too restrictive to limit versions of the dependent

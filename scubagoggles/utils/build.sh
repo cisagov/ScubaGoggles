@@ -172,7 +172,7 @@ source "$scubaEnv/$venvSubdir/activate"
 
 echo "$buildPfx Install requirements and editable ScubaGoggles..."
 
-pip install -r requirements.txt
+pip install -r requirements.txt requierments-test.txt
 
 pip install -e .
 
