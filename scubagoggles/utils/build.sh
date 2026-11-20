@@ -180,8 +180,6 @@ pip install genson
 
 uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
 
-ls -al
-
 FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
 echo "$FOUNDJSON"
 
@@ -197,12 +195,8 @@ datacontract test $FOUNDATACONTRACT
 
 mkdir schemas
 
-ls -al
-
 mv $FOUNDATACONTRACT ./schemas/
 mv ./schemas ./scubagoggles/
-
-ls -al
 
 echo "$buildPfx Build distribution files..."
 
