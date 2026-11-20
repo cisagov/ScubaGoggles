@@ -238,7 +238,7 @@ the actual customer name and `OU_NAME` wherever the admin center would display t
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
     - If set to **OFF**: no action needed.
-    - If set to **ALLOWLISTED DOMAINS**: deselect **Allow sharing with guest accounts and visitors without a Google account in allowlisted domains.**.
+    - If set to **ALLOWLISTED DOMAINS**: deselect **Allow sharing with guest accounts and visitors without a Google account in allowlisted domains**.
     - If set to **ON**: deselect **Allow users or Shared Drives in `OU_NAME` to share items with guest accounts and visitors without Google accounts**.
 
 #### GWS.DRIVEDOCS.1.5v1 Instructions
