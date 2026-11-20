@@ -293,7 +293,7 @@ if {
     section := "drive_and_docs_external_sharing"
     shareSetting := "externalSharingMode"
     extShare := utils.GetApiSettingValue(section, shareSetting, OU)
-    extShare != "DISALLOWED"
+    extShare == "ALLOWED"
     extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
     allowPublishSetting := "allowPublishingFiles"
     allowPublish := utils.GetApiSettingValue(section, allowPublishSetting, OU)
