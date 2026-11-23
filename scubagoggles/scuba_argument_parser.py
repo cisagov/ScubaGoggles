@@ -59,18 +59,22 @@ class ScubaArgumentParser:
     def __init__(self, parser):
         self.parser = parser
 
-    def parse_args(self) -> argparse.Namespace:
+    def parse_args(self, argv: list[str] | None = None) -> argparse.Namespace:
         """
         Parse the arguments without loading config file.
-        """
-        return self.parser.parse_args()
 
-    def parse_args_with_config(self) -> argparse.Namespace:
+        :param argv: Arguments without the program name; None uses sys.argv[1:].
+        """
+        return self.parser.parse_args(argv)
+
+    def parse_args_with_config(self, argv: list[str] | None = None) -> argparse.Namespace:
         """
         Parse the arguments and the config file, if provided, resolving any
         differences between the two.
+
+        :param argv: Arguments without the program name; None uses sys.argv[1:].
         """
-        args = self.parse_args()
+        args = self.parse_args(argv)
 
         self._start_logging(args)
 
@@ -93,7 +97,7 @@ class ScubaArgumentParser:
 
         # Get the args explicitly specified on the command-line so we know
         # what should override the config file
-        cli_args = self._get_explicit_cli_args(args)
+        cli_args = self._get_explicit_cli_args(args, argv)
 
         with open(args.config, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
@@ -192,10 +196,12 @@ class ScubaArgumentParser:
         return value
 
     @classmethod
-    def _get_explicit_cli_args(cls, args : argparse.Namespace) -> dict:
+    def _get_explicit_cli_args(cls, args: argparse.Namespace,
+                               argv: list[str] | None = None) -> argparse.Namespace:
         """
-        Return the list of arguments that were explicitly specified on the
-        command-line.
+        Return only the explicitly supplied arguments, without defaults.
+
+        :param argv: Arguments without the program name; None uses sys.argv[1:].
         """
         # Build a secondary parser, configure the secondary parser to
         # suppress the default values so the secondary parser will only
@@ -212,7 +218,7 @@ class ScubaArgumentParser:
                 aux_parser.add_argument(*dests, action='store_false')
             else:
                 aux_parser.add_argument(*dests)
-        cli_args, _ = aux_parser.parse_known_args()
+        cli_args, _ = aux_parser.parse_known_args(argv)
         return cli_args
 
     @staticmethod
