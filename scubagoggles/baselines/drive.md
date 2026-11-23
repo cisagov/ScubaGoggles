@@ -270,7 +270,7 @@ the actual customer name and `OU_NAME` wherever the admin center would display t
 2.  Deselect **Allow forms owned by users in `OU_NAME` to accept responses from anyone with the link outside `CUSTOMER_NAME`, even if external sharing isn't allowed**.
 
 #### GWS.DRIVEDOCS.1.11v2 Instructions
-1.  Select **Sharing settings -\> **Form responses**.
+1.  Select **Sharing settings** -\> **Form responses**.
 2.  Deselect **Allow users in `OU_NAME` to submit responses to forms from users or shared drives outside of `CUSOMTER_NAME`, even if receiving external files isn’t allowed**.
 
 ## 2. Shared Drive Creation
