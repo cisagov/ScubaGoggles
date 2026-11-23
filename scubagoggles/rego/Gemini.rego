@@ -83,14 +83,31 @@ if {
 
 GeminiId3_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
 
+NonComplianceMessage3_1 := "Gemini conversation history is disabled."
+
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage3_1
+} if {
+    some OU, settings in input.policies
+    GeminiEnabled(OU)
+    settings.gemini_app_conversation_history.conversationHistoryState != "ENABLED"
+}
+
 tests contains {
     "PolicyId": GeminiId3_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": [
+        "policy/gemini_app_conversation_history.conversationHistoryState",
+        "policy/gemini_app_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs3_1) == 0
 }
 #--
 
@@ -100,14 +117,46 @@ tests contains {
 
 GeminiId3_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
 
+# Retention of at least 18 months is required.
+CompliantRetentionValues := {"EIGHTEEN_MONTHS", "THIRTY_SIX_MONTHS"}
+
+GetFriendlyValue3_2(Value) := "3 months" if {
+    Value == "THREE_MONTHS"
+} else := "18 months" if {
+    Value == "EIGHTEEN_MONTHS"
+} else := "36 months" if {
+    Value == "THIRTY_SIX_MONTHS"
+} else := "Unspecified" if {
+    Value == "CONVERSATION_RETENTION_UNSPECIFIED"
+} else := Value
+
+NonComplianceMessage3_2(value) := sprintf("Conversation retention is set to: %s",
+                                          [value])
+
+NonCompliantOUs3_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage3_2(GetFriendlyValue3_2(Retention))
+} if {
+    some OU, settings in input.policies
+    GeminiEnabled(OU)
+    Retention := settings.gemini_app_conversation_history.conversationRetention
+    not Retention in CompliantRetentionValues
+}
+
 tests contains {
     "PolicyId": GeminiId3_2,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": [
+        "policy/gemini_app_conversation_history.conversationRetention",
+        "policy/gemini_app_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs3_2) == 0
 }
 #--
 
@@ -121,14 +170,43 @@ tests contains {
 
 GeminiId4_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.4.1")
 
+GetFriendlyValue4_1(Value) := "Allow sharing via link" if {
+    Value == "ALLOW_SHARING_VIA_LINK"
+} else := "Allow sharing via Drive" if {
+    Value == "ALLOW_SHARING_VIA_DRIVE"
+} else := "Disabled" if {
+    Value == "DISABLED"
+} else := "Unspecified" if {
+    Value == "CONVERSATION_SHARING_OPTION_UNSPECIFIED"
+} else := Value
+
+NonComplianceMessage4_1(value) := sprintf("Conversation sharing is set to: %s",
+                                          [value])
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(Sharing))
+} if {
+    some OU, settings in input.policies
+    GeminiEnabled(OU)
+    Sharing := settings.gemini_app_conversation_sharing.conversationSharingOption
+    Sharing != "DISABLED"
+}
+
 tests contains {
     "PolicyId": GeminiId4_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": [
+        "policy/gemini_app_conversation_sharing.conversationSharingOption",
+        "policy/gemini_app_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs4_1) == 0
 }
 #--
 

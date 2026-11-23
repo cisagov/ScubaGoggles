@@ -206,6 +206,12 @@ class PolicyAPI:
             'securityUpdate': isEnum}},
         'enterprise_service_restrictions_service_status': {'settings': {
             'serviceState': isState}},
+        'gemini_app_conversation_history': {'reducer': _merge_reducer,
+            'settings': {
+                'conversationHistoryState': isEnum,
+                'conversationRetention': isEnum}},
+        'gemini_app_conversation_sharing': {'settings': {
+            'conversationSharingOption': isEnum}},
         'gemini_app_service_status': {'settings': {'serviceState': isState}},
         'gemini_app_unlicensed_user_access': {'settings': {'enabled': isBool}},
         'gemini_for_workspace_beta_features': {'settings': {'enabled': isBool}},

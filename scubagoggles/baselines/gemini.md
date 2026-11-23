@@ -140,10 +140,11 @@ This section covers Gemini conversation history retention.
 #### GWS.GEMINI.3.1v1
 Gemini conversation history SHALL be enabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini31v1-instructions)
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
-- _Last modified:_ March 2026
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -151,10 +152,11 @@ Gemini conversation history SHALL be enabled.
 #### GWS.GEMINI.3.2v1
 Gemini conversation retention SHALL be set to minimum of 18 months.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini32v1-instructions)
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
-- _Last modified:_ March 2026
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -193,10 +195,11 @@ This section covers Gemini conversation sharing.
 #### GWS.GEMINI.4.1v1
 Conversation sharing SHALL be set to OFF.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini41v1-instructions)
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Disabling conversation sharing may prevent sensitive data from being shared with unauthorized individuals.
-- _Last modified:_ April 2026
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)a
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
