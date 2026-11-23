@@ -1,4 +1,4 @@
-package gemini
+package si
 
 import future.keywords
 import data.utils.FailTestOUNonCompliant
@@ -29,11 +29,11 @@ BadGeminiApi01 := {
 }
 
 #
-# GWS.GEMINI.1.1
+# GWS.SI.1.1
 #--
 
 test_UnlicensedAccess_Correct_1 if {
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as GoodGeminiApi01
 
     PassTestResult(PolicyId, Output)
@@ -41,7 +41,7 @@ test_UnlicensedAccess_Correct_1 if {
 
 test_UnlicensedAccess_Correct_2 if {
     # Unlicensed access allowed but Gemini disabled for OU
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
         "policies": {
             "topOU": {
@@ -58,7 +58,7 @@ test_UnlicensedAccess_Correct_2 if {
 }
 
 test_UnlicensedAccess_Incorrect_1 if {
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as BadGeminiApi01
 
     failedOU := [{"Name": "topOU",
@@ -68,7 +68,7 @@ test_UnlicensedAccess_Incorrect_1 if {
 
 test_UnlicensedAccess_Incorrect_2 if {
     # Child OU override enables unlicensed access
-    PolicyId := GeminiId1_1
+    PolicyId := SIId1_1
     Output := tests with input as {
         "policies": {
             "topOU": {

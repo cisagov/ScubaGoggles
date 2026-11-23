@@ -1,4 +1,4 @@
-package gemini
+package si
 
 import future.keywords
 import data.utils.FailTestOUNonCompliant
@@ -27,18 +27,18 @@ BadGeminiApi02 := {
 }
 
 #
-# GWS.GEMINI.2.1
+# GWS.SI.2.1
 #--
 
 test_BetaFeatures_Correct_1 if {
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as GoodGeminiApi02
 
     PassTestResult(PolicyId, Output)
 }
 
 test_BetaFeatures_Incorrect_1 if {
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as BadGeminiApi02
 
     failedOU := [{"Name": "topOU",
@@ -48,7 +48,7 @@ test_BetaFeatures_Incorrect_1 if {
 
 test_BetaFeatures_Incorrect_2 if {
     # Beta features enabled even when Gemini app is disabled
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
         "policies": {
             "topOU": {
@@ -68,7 +68,7 @@ test_BetaFeatures_Incorrect_2 if {
 
 test_BetaFeatures_Incorrect_3 if {
     # Child OU override enables beta features
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
         "policies": {
             "topOU": {
