@@ -1970,11 +1970,7 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.17.1
 #--
-
 CommonControlsId17_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.1")
-
-# NOTE: This setting cannot be controlled at the group level
-
 NonComplianceMessage17_1 := "Multi-party approval is not required for sensitive admin actions."
 
 NonCompliantOUs17_1 contains {
@@ -1999,7 +1995,54 @@ tests contains {
 if {
     Status := count(NonCompliantOUs17_1) == 0
 }
+#--
 
+#
+# Baseline GWS.COMMONCONTROLS.17.2
+#--
+CommonControlsId17_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.2")
+
+tests contains {
+    "PolicyId": CommonControlsId17_2,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": utils.ManualCheckMessage,
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.17.3
+#--
+CommonControlsId17_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.3")
+
+tests contains {
+    "PolicyId": CommonControlsId17_3,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": utils.ManualCheckMessage,
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.17.4
+#--
+CommonControlsId17_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.4")
+
+tests contains {
+    "PolicyId": CommonControlsId17_4,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": utils.ManualCheckMessage,
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
 #--
 
 #########################
