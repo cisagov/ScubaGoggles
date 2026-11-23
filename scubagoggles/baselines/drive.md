@@ -219,7 +219,7 @@ the actual customer name and `OU_NAME` wherever the admin center would display t
 #### GWS.DRIVEDOCS.1.1v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Sharing outside of `CUSTOMER_NAME`** -\> **ALLOWLISTED DOMAINS – Files owned by users or shared drives in `OU_NAME` can be shared with Google accounts in compatible allowlisted domains**.
-    - _Note:_ Selecting **OFF – Files owned by users in `OU_NAME` can't be shared outside of `CUSTOMER_NAME`** is more restrictive and also satisfies this policy.
+    - _Note:_ Selecting **OFF – Files owned by users or shared drives in `OU_NAME` can't be shared outside of `CUSTOMER_NAME`** is more restrictive and also satisfies this policy.
 
 #### GWS.DRIVEDOCS.1.2v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
