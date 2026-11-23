@@ -213,6 +213,9 @@ class PolicyAPI:
         'gemini_app_conversation_sharing': {'settings': {
             'conversationSharingOption': isEnum}},
         'gemini_app_service_status': {'settings': {'serviceState': isState}},
+        'gemini_app_service_status': {'settings': {'serviceState': isState}},
+        'gemini_app_unlicensed_user_access': {'settings': {'enabled': isBool}},
+        'gemini_for_workspace_beta_features': {'settings': {'enabled': isBool}},
         'gmail_auto_forwarding': {'settings': {'enableAutoForwarding': isBool}},
         'gmail_blocked_sender_lists': {
             'parser': GmailRulesParser,
