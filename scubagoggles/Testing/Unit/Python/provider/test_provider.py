@@ -37,6 +37,11 @@ from scubagoggles.Testing.Unit.Python.provider.get_list_cases import (
 from scubagoggles.Testing.Unit.Python.provider.license_cases import (
     GET_LICENSE_DATA_CASES,
 )
+from scubagoggles.Testing.Unit.Python.provider.gws_providers_cases import (
+    COLLECT_ORGANIZATIONAL_UNITS_CASES,
+    COLLECT_GWS_LOGS_CASES,
+    ASSEMBLE_PROVIDER_ITEMS_CASES,
+)
 
 # Disable "protected-access" because we test some internal methods
 # pylint: disable=protected-access
@@ -1165,3 +1170,224 @@ class TestProvider:
         # instantiated provider. It also doesn't actually make any DNS queries or call any APIs so
         # no need to mock that
         assert Provider._parse_dmarc_record(dns_answers) == expected
+
+    @pytest.mark.parametrize("cases", COLLECT_ORGANIZATIONAL_UNITS_CASES)
+    @pytest.mark.usefixtures("mock_build")
+    def test_collect_organizational_units(self, mocker, cases):
+        """
+        Verifies Provider._collect_organizational_units() gathers OU data
+        and OU names, and warns when get_ous() fails.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param cases: Parametrized test cases for OU collection.
+        """
+        provider = self._provider()
+        provider._top_ou = cases["top_ou"]
+
+        if cases["get_ous_raises"] is not None:
+            mocker.patch.object(
+                provider, "get_ous", side_effect=cases["get_ous_raises"]
+            )
+        else:
+            mocker.patch.object(
+                provider, "get_ous", return_value=cases["ous_response"]
+            )
+
+        if cases["expect_warning"]:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting tenant data"
+            ):
+                result = provider._collect_organizational_units()
+        else:
+            result = provider._collect_organizational_units()
+
+        for key in cases["expected_keys"]:
+            assert key in result
+
+        if cases["expected_ou_names"] is not None:
+            assert set(result["organizational_unit_names"]) == cases["expected_ou_names"]
+            assert result["organizational_units"] == cases["ous_response"]
+        else:
+            assert "organizational_unit_names" not in result
+
+    @pytest.mark.parametrize("cases", COLLECT_GWS_LOGS_CASES)
+    @pytest.mark.usefixtures("mock_build")
+    def test_collect_gws_logs(self, mocker, cases):
+        """
+        Verifies Provider._collect_gws_logs() merges per-event logs into the
+        product aggregator and tracks API call success/failure.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param cases: Parametrized test cases for log collection.
+        """
+        provider = self._provider()
+
+        if cases["get_gws_logs_raises"] is not None:
+            mocker.patch.object(
+                provider, "get_gws_logs", side_effect=cases["get_gws_logs_raises"]
+            )
+        else:
+            mocker.patch.object(
+                provider,
+                "get_gws_logs",
+                side_effect=cases["get_gws_logs_side_effect"]
+            )
+
+        if cases["expect_warning"]:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Provider Exception thrown while getting the logs"
+            ):
+                result = provider._collect_gws_logs(cases["products"], quiet=True)
+        else:
+            result = provider._collect_gws_logs(cases["products"], quiet=True)
+
+        assert result == cases["expected"]
+
+        if cases["expect_success_call"]:
+            assert ApiReference.LIST_ACTIVITIES.value in provider._successful_calls
+        else:
+            assert ApiReference.LIST_ACTIVITIES.value not in provider._successful_calls
+
+        if cases["expect_unsuccessful_call"]:
+            assert ApiReference.LIST_ACTIVITIES.value in provider._unsuccessful_calls
+        else:
+            assert ApiReference.LIST_ACTIVITIES.value not in provider._unsuccessful_calls
+
+    @pytest.mark.parametrize("cases", ASSEMBLE_PROVIDER_ITEMS_CASES)
+    @pytest.mark.usefixtures("mock_build")
+    def test_assemble_provider_items(self, mocker, cases):
+        """
+        Verifies Provider._assemble_provider_items() packs logs under
+        {product}_logs keys and collects optional DNS / commoncontrols data.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param cases: Parametrized test cases for provider item assembly.
+        """
+        provider = self._provider()
+
+        if cases["get_tenant_info_raises"] is not None:
+            mocker.patch.object(
+                provider,
+                "get_tenant_info",
+                side_effect=cases["get_tenant_info_raises"]
+            )
+        else:
+            mocker.patch.object(
+                provider, "get_tenant_info", return_value=cases["tenant_info"]
+            )
+
+        mocker.patch.object(
+            provider, "get_dnsinfo", return_value=cases["dns_info"] or {}
+        )
+        mocker.patch.object(
+            provider, "get_group_settings", return_value=cases["group_settings"] or {}
+        )
+
+        if cases["include_commoncontrols"]:
+            mocker.patch.object(
+                provider, "get_super_admins", return_value={"super_admins": []}
+            )
+            mocker.patch.object(
+                provider, "get_privileged_users", return_value={"privileged_users": []}
+            )
+            mocker.patch.object(
+                provider,
+                "get_inbound_sso_assignments",
+                return_value={"inbound_sso_assignments": []}
+            )
+            mocker.patch.object(
+                provider, "get_license_data", return_value={"license_data": {}}
+            )
+
+        if cases["expect_warning"]:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Uncaught Exception thrown while getting other data"
+            ):
+                result = provider._assemble_provider_items(
+                    cases["product_to_items"],
+                    cases["product_to_logs"],
+                    quiet=True
+                )
+        else:
+            result = provider._assemble_provider_items(
+                cases["product_to_items"],
+                cases["product_to_logs"],
+                quiet=True
+            )
+
+        for key in cases["expected_log_keys"]:
+            assert key in result
+            product = key.removesuffix("_logs")
+            assert result[key] == {"items": cases["product_to_logs"][product]}
+
+        if not cases["expect_warning"]:
+            assert result["tenant_info"] == cases["tenant_info"]
+            assert "group_settings" in result
+
+        if cases["expect_dns"]:
+            assert "spf_records" in result
+        else:
+            assert "spf_records" not in result
+
+        if cases["expect_commoncontrols"]:
+            assert "super_admins" in result
+            assert "privileged_users" in result
+            assert "inbound_sso_assignments" in result
+            assert "license_data" in result
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_call_gws_providers_orchestration(self, mocker):
+        """
+        Verifies call_gws_providers() calls the three submethods in order,
+        attaches policies, and returns the final product_to_items dict.
+        """
+        provider = self._provider()
+
+        ou_data = {
+            "organizational_units": {"organizationUnits": []},
+            "organizational_unit_names": ["", "Root OU"],
+        }
+        product_logs = {"gemini": [{"id": "1"}]}
+        assembled = {
+            **ou_data,
+            "policies": {"policy": True},
+            "gemini_logs": {"items": [{"id": "1"}]},
+            "tenant_info": {"ID": "t1"},
+        }
+
+        collect_ous = mocker.patch.object(
+            provider, "_collect_organizational_units", return_value=ou_data
+        )
+        collect_logs = mocker.patch.object(
+            provider, "_collect_gws_logs", return_value=product_logs
+        )
+        assemble = mocker.patch.object(
+            provider, "_assemble_provider_items", return_value=assembled
+        )
+
+        mock_policy_api = mocker.MagicMock()
+        mock_policy_api.__enter__.return_value = mock_policy_api
+        mock_policy_api.__exit__.return_value = False
+        mock_policy_api.get_policies.return_value = {"policy": True}
+        mock_policy_api.verify.return_value = set()
+        mocker.patch("scubagoggles.provider.PolicyAPI", return_value=mock_policy_api)
+
+        provider._successful_calls = {"ok"}
+        provider._unsuccessful_calls = set()
+        provider._missing_policies = set()
+
+        result = provider.call_gws_providers(["gemini"], quiet=True)
+
+        collect_ous.assert_called_once_with()
+        collect_logs.assert_called_once_with(["gemini"], True)
+        assemble.assert_called_once()
+        assert assemble.call_args.args[0]["policies"] == {"policy": True}
+        assert assemble.call_args.args[1] == product_logs
+
+        assert result["successful_calls"] == ["ok"]
+        assert result["unsuccessful_calls"] == []
+        assert result["missing_policies"] == []
+        assert result["gemini_logs"] == {"items": [{"id": "1"}]}
