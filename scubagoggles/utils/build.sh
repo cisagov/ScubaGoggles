@@ -172,9 +172,29 @@ source "$scubaEnv/$venvSubdir/activate"
 
 echo "$buildPfx Install requirements and editable ScubaGoggles..."
 
-pip install -r requirements.txt
+pip install -r requirements.txt requierments-test.txt
 
 pip install -e .
+
+uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
+
+FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
+echo "$FOUNDJSON"
+
+genson -s $FOUNDJSON
+datacontract import json --source $FOUNDJSON --json-schema NULL --output scubagoggles_sample_report_datacontract.yaml
+
+FOUNDATACONTRACT=$(find ./ -type f -name "scubagoggles_sample_report_datacontract.yaml")
+echo "$FOUNDATACONTRACT"
+
+yq -i 'del(.. | select(has("format") and .format == "email") | .format)' $FOUNDATACONTRACT
+
+datacontract test $FOUNDATACONTRACT
+
+mkdir schemas
+
+mv $FOUNDATACONTRACT ./schemas/
+mv ./schemas ./scubagoggles/
 
 echo "$buildPfx Build distribution files..."
 

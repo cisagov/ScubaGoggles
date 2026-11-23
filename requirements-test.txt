@@ -1,0 +1,4 @@
+# These packages are used for software development and are not needed by
+# the Scubagoggles users:
+uv
+genson
