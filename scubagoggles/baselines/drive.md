@@ -67,7 +67,7 @@ Receiving files from non-allowlisted domains SHOULD be disabled.
 
 - _Rationale:_ Users given access to external files may inadvertently input personally identifiable information or sensitive information. Additionally, files created externally may contain malicious content. Disallowing external files from being shared may reduce the risk of data loss or external threats.
 - _Last modified:_ August 2025
-- _Note:_ This policy is only applicable if external sharing is set to either **ON** or **ALLOWLISTED DOMAINS**.
+- _Note:_ This policy is only applicable if external sharing is set to either **OFF** or **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
