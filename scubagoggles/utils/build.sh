@@ -176,8 +176,6 @@ pip install -r requirements.txt requierments-test.txt
 
 pip install -e .
 
-pip install genson
-
 uv tool install --python python3.11 --upgrade 'datacontract-cli[all]'
 
 FOUNDJSON=$(find ./scubagoggles/sample-report -type f -name "ScubaResults_*.json")
