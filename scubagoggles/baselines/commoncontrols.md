@@ -93,13 +93,13 @@ Phishing-Resistant MFA SHALL be required for all users.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5g, IA-2(8)
 - MITRE ATT&CK TTP Mapping
-  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1621: Multi-Factor Authentication Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
@@ -113,13 +113,13 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
-  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1621: Multi-Factor Authentication Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
@@ -133,13 +133,13 @@ SMS or Voice SHALL NOT be used as the MFA method.
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7b, IA-5c
 - MITRE ATT&CK TTP Mapping
-  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1621: Multi-Factor Authentication Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
@@ -153,13 +153,13 @@ The Google 2-Step Verification (2SV) new user enrollment period SHALL be set to 
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
-  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1621: Multi-Factor Authentication Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
@@ -173,13 +173,13 @@ Allow users to trust the device SHALL be disabled.
 - _Last modified:_ February 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
-  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1621: Multi-Factor Authentication Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
@@ -582,8 +582,8 @@ All administrative accounts SHALL be provisioned as cloud-only accounts separate
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.6.2v1
 A minimum of **two** and a maximum of **eight** separate and distinct super admin users SHALL be configured.
@@ -701,8 +701,8 @@ Account self-recovery for super admins SHALL be disabled.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.8.2v1
 Account self-recovery for users and non-super admins SHALL be disabled.
@@ -714,8 +714,8 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 - _Last modified:_ February 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.8.3v1
 Ability to add recovery information SHOULD be disabled.
@@ -793,8 +793,8 @@ Highly privileged accounts SHALL be enrolled in the Google Workspace (GWS) Advan
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.9.2v1
 All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
@@ -810,8 +810,8 @@ All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection 
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modify Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 ### Resources
 
@@ -851,8 +851,8 @@ Agencies SHALL use GWS application access control policies to restrict access to
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
+  - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
+    - [T1550:001: Use Alternate Authentication Material: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -868,8 +868,8 @@ Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
+  - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
+    - [T1550:001: Use Alternate Authentication Material: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -885,8 +885,8 @@ Agencies SHALL NOT trust unconfigured internal applications.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
+  - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
+    - [T1550:001: Use Alternate Authentication Material: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -902,8 +902,8 @@ Agencies SHALL NOT allow users to access unconfigured third-party applications.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
+  - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
+    - [T1550:001: Use Alternate Authentication Material: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -1230,8 +1230,8 @@ The data storage region SHALL be set to be the United States for all users in th
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
-  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
-    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1591: Gather Victim Org Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001 Gather Victim Org Information: Determine Physical Locations](https://attack.mitre.org/techniques/T1591/001/)
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
@@ -1245,8 +1245,8 @@ Data SHALL be processed in the region selected for data at rest.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
-  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
-    - [T1591:001: Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1591: Gather Victim Org Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001: Gather Victim Org Information: Determine Physical Locations](https://attack.mitre.org/techniques/T1591/001/)
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
   - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
@@ -1298,9 +1298,9 @@ Service status for Google services that do not have an individual control SHOULD
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
-    - [T1204:001: Trusted Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
-    - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
-    - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
+    - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v1
 User access to Early Access applications SHOULD be disabled.
