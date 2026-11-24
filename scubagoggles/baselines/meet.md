@@ -143,7 +143,7 @@ Host management meeting features SHALL be enabled.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
-  - [T1562:001: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
+  - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:001: Impair Defenses: Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001/)
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
   - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)

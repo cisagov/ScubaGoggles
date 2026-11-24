@@ -114,7 +114,7 @@ DKIM SHOULD be enabled for all domains.
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
-  - [T1434: Internal Spear Phishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
 
 ### Resources
@@ -454,7 +454,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
@@ -470,7 +470,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
@@ -486,7 +486,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4, SI-8, AT-2b
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
@@ -558,7 +558,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -573,7 +573,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -588,7 +588,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -603,7 +603,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -618,7 +618,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 - _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -634,7 +634,7 @@ Emails flagged by SCuBA policies GWS.GMAIL.7.1 through GWS.GMAIL.7.5 SHALL NOT b
 - _Note:_ Agencies/organizations can choose whether to send the emails to spam or quarantine.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
@@ -650,7 +650,7 @@ Google SHALL be allowed to automatically apply future recommended settings for s
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
